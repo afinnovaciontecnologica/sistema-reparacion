@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - Sistema</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="./css/styles.css">
+<link rel="stylesheet" href="./css/dashboard.css">
+
+<!-- ICONOS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- LIBRERÍAS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<h2>🛠 Sistema</h2>
+
+<ul>
+
+    <li><a href="./dashboard.html" class="active"><i class="fa fa-home"></i> Inicio</a></li>
+
+    <li><a href="./clientes.html"><i class="fa fa-users"></i> Clientes</a></li>
+
+    <li><a href="./cotizaciones.html"><i class="fa fa-file-alt"></i> Cotización</a></li>
+
+    <li class="admin-only">
+        <a href="./productos.html"><i class="fa fa-box"></i> Productos</a>
+    </li>
+
+    <li><a href="./reparaciones.html"><i class="fa fa-tools"></i> Reparaciones</a></li>
+
+    <li><a href="./ventas.html"><i class="fa fa-shopping-cart"></i> Ventas</a></li>
+
+    <li class="admin-only">
+        <a href="./historial.html"><i class="fa fa-clock"></i> Historial</a>
+    </li>
+
+    <li>
+        <a href="#" id="btnLogout"><i class="fa fa-sign-out-alt"></i> Salir</a>
+    </li>
+
+</ul>
+
+</div>
+
+<!-- MAIN -->
+<div class="main" id="reportArea">
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h1>Dashboard</h1>
+    <span id="welcomeText">Bienvenido</span>
+</div>
+
+<!-- FILTROS -->
+<div class="filtros">
+    <button onclick="filtrar('hoy')">📅 Hoy</button>
+    <button onclick="filtrar('mes')">🗓️ Este mes</button>
+    <button onclick="filtrar('todo')">📊 Todo</button>
+
+    <button id="btnDescargar" class="admin-only">📄 Descargar</button>
+</div>
+
+<!-- CARDS -->
+<div class="cards">
+
+    <div class="card">
+        <i class="fa fa-users"></i>
+        <h3>Clientes</h3>
+        <p id="totalClientes">0</p>
+    </div>
+
+    <div class="card">
+        <i class="fa fa-tools"></i>
+        <h3>Reparaciones</h3>
+        <p id="totalReparaciones">0</p>
+    </div>
+
+    <div class="card">
+        <i class="fa fa-shopping-cart"></i>
+        <h3>Ventas</h3>
+        <p id="totalVentas">0</p>
+    </div>
+
+    <div class="card">
+        <i class="fa fa-coins"></i>
+        <h3>Ingresos</h3>
+        <p id="ingresos">S/. 0</p>
+    </div>
+
+</div>
+
+<!-- MENSAJE VACÍO -->
+<div id="mensajeVacio" class="mensaje-vacio" style="display:none;">
+    ⚠️ No hay datos disponibles
+</div>
+
+<!-- GRÁFICOS -->
+<div class="graficos">
+
+    <div class="grafico-box">
+        <h2>📈 Ventas por día</h2>
+        <canvas id="graficoVentas"></canvas>
+    </div>
+
+    <div class="grafico-box">
+        <h2>🏆 Top Productos</h2>
+        <canvas id="topProductos"></canvas>
+    </div>
+
+</div>
+
+</div>
+
+<!-- 🔐 PROTECCIÓN (IMPORTANTE) -->
+<script type="module" src="./js/protect.js"></script>
+
+<!-- JS PRINCIPAL -->
+<script src="./js/dashboard.js"></script>
+<script src="./js/roles.js"></script>
+
+<!-- SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const rol = localStorage.getItem("rol");
+    const welcome = document.getElementById("welcomeText");
+    const btnPDF = document.getElementById("btnDescargar");
+
+    // BIENVENIDA
+    if (rol === "admin") {
+        welcome.textContent = "Bienvenido, Administrador 👋";
+    } else {
+        welcome.textContent = "Bienvenido, Empleado 👋";
+    }
+
+    // LOGOUT
+    document.getElementById("btnLogout").onclick = (e) => {
+        e.preventDefault();
+        localStorage.removeItem("rol");
+        window.location.href = "./login.html";
+    };
+
+    // PDF SOLO ADMIN
+    if (rol === "admin") {
+        btnPDF.onclick = generarPDF;
+    }
+
+});
+
+// GENERAR PDF
+async function generarPDF(){
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const area = document.getElementById("reportArea");
+    const canvas = await html2canvas(area);
+
+    const img = canvas.toDataURL("image/png");
+
+    doc.addImage(img,"PNG",0,0);
+    doc.save("reporte.pdf");
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reparaciones PRO</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/reparaciones.css">
+
+<!-- ICONOS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>🛠 Sistema</h2>
+
+    <a href="/dashboard.html"><i class="fa fa-home"></i> Inicio</a>
+    <a href="clientes.html"><i class="fa fa-users"></i> Clientes</a>
+    <a href="cotizaciones.html"><i class="fa fa-file-alt"></i> Cotización</a>
+    <a href="productos.html"><i class="fa fa-box"></i> Productos</a>
+    <a href="reparaciones.html" class="active"><i class="fa fa-tools"></i> Reparaciones</a>
+    <a href="ventas.html"><i class="fa fa-shopping-cart"></i> Ventas</a>
+    <a href="historial.html"><i class="fa fa-clock"></i> Historial</a>
+    <a href="#" id="btnLogout"><i class="fa fa-sign-out-alt"></i> Salir</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<h1>🛠 Reparaciones PRO</h1>
+<hr>
+
+<!-- CLIENTE -->
+<div class="card">
+<h3>👤 Cliente</h3>
+
+<div class="grid">
+<input type="text" id="buscarCliente" placeholder="🔎 Buscar cliente" autocomplete="off">
+
+<select id="cliente">
+<option value="">Seleccionar cliente</option>
+</select>
+
+<div class="cliente-info">
+    <div>📱 <strong id="telefonoCliente">-</strong></div>
+    <div>📧 <strong id="correoCliente">-</strong></div>
+</div>
+</div>
+
+<div id="mensajeCliente" class="mensaje"></div>
+</div>
+
+<!-- EQUIPO -->
+<div class="card">
+<h3>💻 Datos del Equipo</h3>
+
+<div class="grid">
+
+<select id="tipoEquipo">
+<option value="">Tipo de equipo</option>
+<option>Laptop</option>
+<option>PC</option>
+<option>Celular</option>
+<option>Tablet</option>
+<option>Impresora</option>
+</select>
+
+<select id="marca">
+<option value="">Seleccione marca</option>
+</select>
+
+<input type="text" id="modelo" placeholder="Modelo">
+
+<input id="tecnico" placeholder="👨‍🔧 Técnico responsable">
+<input id="garantia" placeholder="🛡 Garantía">
+
+<select id="estetica">
+<option value="">Estado estético</option>
+<option>Bueno</option>
+<option>Regular</option>
+<option>Malo</option>
+</select>
+
+</div>
+
+<div class="accesorios">
+<label><input type="checkbox" value="Cargador"> 🔌 Cargador</label>
+<label><input type="checkbox" value="Batería"> 🔋 Batería</label>
+<label><input type="checkbox" value="Mouse"> 🖱 Mouse</label>
+<label><input type="checkbox" value="Funda"> 🎒 Funda</label>
+</div>
+
+</div>
+
+<!-- DIAGNÓSTICO -->
+<div class="card">
+<h3>🧠 Diagnóstico</h3>
+
+<div>
+<button onclick="seleccionarTodo()">✔ Seleccionar todo</button>
+<button onclick="limpiarServicios()">❌ Limpiar</button>
+<button onclick="resetearCorrelativo()">🔄 Reset Orden</button>
+</div>
+
+<div id="listaServicios"></div>
+
+<textarea id="solucion" placeholder="Solución"></textarea>
+
+</div>
+
+<!-- CONTROL -->
+<div class="card">
+<h3>💰 Control del Servicio</h3>
+
+<div class="grid">
+<select id="estado">
+<option value="Pendiente">Pendiente</option>
+<option value="En proceso">En proceso</option>
+<option value="Terminado">Terminado</option>
+</select>
+
+<input type="number" id="costo" placeholder="Costo">
+</div>
+
+<button onclick="guardarReparacion()">Guardar</button>
+</div>
+
+<!-- TABLA -->
+<h3>📋 Registro</h3>
+
+<input type="text" id="buscarOrden" placeholder="Buscar...">
+
+<table>
+<thead>
+<tr>
+<th>Cliente</th>
+<th>Equipo</th>
+<th>Problema</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaReparaciones"></tbody>
+</table>
+
+</div>
+
+<!-- JS -->
+<script src="/js/reparaciones.js"></script>
+<script src="/js/roles.js"></script>
+
+<!-- LOGOUT -->
+<script>
+document.getElementById("btnLogout").addEventListener("click", function(e){
+    e.preventDefault();
+    localStorage.removeItem("rol");
+    window.location.href = "/login.html";
+});
+</script>
+
+<!-- MODAL -->
+<div id="modalControl" class="modal-boleta">
+<div class="boleta-box">
+
+<div id="controlVista"></div>
+
+<div>
+<button onclick="descargarControlPDF()">PDF</button>
+<button onclick="enviarControlWhatsApp()">WhatsApp</button>
+<button onclick="cerrarControl()">Cerrar</button>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historial de Ventas</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/historial.css">
+
+<!-- ICONOS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<!-- html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</head>
+
+<body>
+
+<!-- ===================== -->
+<!-- SIDEBAR -->
+<!-- ===================== -->
+
+<div class="sidebar">
+
+    <h2 style="color:#38bdf8;">🛠 Sistema</h2>
+
+    <a href="/dashboard.html" id="menu-inicio">
+        <i class="fa fa-home"></i> Inicio
+    </a>
+
+    <a href="clientes.html" id="menu-clientes">
+        <i class="fa fa-users"></i> Clientes
+    </a>
+
+    <a href="cotizaciones.html" id="menu-cotizacion">
+        <i class="fa fa-file-alt"></i> Cotización
+    </a>
+
+    <a href="productos.html" id="menu-productos">
+        <i class="fa fa-box"></i> Productos
+    </a>
+
+    <a href="reparaciones.html" id="menu-reparaciones">
+        <i class="fa fa-tools"></i> Reparaciones
+    </a>
+
+    <a href="ventas.html" id="menu-ventas">
+        <i class="fa fa-shopping-cart"></i> Ventas
+    </a>
+
+    <a href="historial.html" class="active" id="menu-historial">
+        <i class="fa fa-clock"></i> Historial
+    </a>
+
+    <a href="#" id="btnLogout">
+        <i class="fa fa-sign-out-alt"></i> Salir
+    </a>
+
+</div>
+
+<!-- ===================== -->
+<!-- MAIN -->
+<!-- ===================== -->
+
+<div class="main">
+
+    <h1>📋 Historial de Ventas</h1>
+
+    <!-- ACCIONES -->
+    <div class="top-bar">
+
+        <button class="btn-danger" onclick="borrarTodoHistorial()">
+            🗑 Borrar todo el historial
+        </button>
+
+        <button class="btn-danger" onclick="reiniciarNumeracionBoleta()">
+            🔄 Reiniciar numeración boleta
+        </button>
+
+        <input
+            type="text"
+            id="buscarVenta"
+            placeholder="🔎 Buscar por cliente o número de boleta"
+        >
+
+    </div>
+
+    <!-- TABLA -->
+    <div class="table-container">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Cliente</th>
+                    <th>Fecha</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="tablaHistorial"></tbody>
+
+        </table>
+
+        <!-- MENSAJE VACÍO -->
+        <div id="sinDatos" style="text-align:center; padding:15px; color:#94a3b8;">
+            No hay ventas registradas
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================== -->
+<!-- MODAL BOLETA -->
+<!-- ===================== -->
+
+<div id="modalBoleta" class="modal-boleta">
+
+    <div class="boleta-box">
+
+        <!-- CONTENIDO -->
+        <div id="boletaVista"></div>
+
+        <!-- BOTONES -->
+        <div class="acciones-boleta">
+            <button onclick="imprimirBoleta()">🖨 Imprimir</button>
+            <button onclick="cerrarBoleta()">❌ Cerrar</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===================== -->
+<!-- NOTIFICACION -->
+<!-- ===================== -->
+
+<div id="notificacion" class="noti"></div>
+
+<!-- ===================== -->
+<!-- JS -->
+<!-- ===================== -->
+
+<script src="/js/historial.js"></script>
+<script src="/js/protect.js"></script>
+<script src="/js/roles.js"></script>
+
+<!-- ===================== -->
+<!-- LOGOUT -->
+<!-- ===================== -->
+
+<script>
+document.getElementById("btnLogout").addEventListener("click", function(e){
+    e.preventDefault();
+    localStorage.removeItem("rol");
+    window.location.href = "/login.html";
+});
+</script>
+
+<!-- ===================== -->
+<!-- CONTROL VACÍO -->
+<!-- ===================== -->
+
+<script>
+function controlarVistaVacia(){
+    const tabla = document.getElementById("tablaHistorial");
+    const vacio = document.getElementById("sinDatos");
+
+    if(tabla && vacio){
+        if(tabla.children.length === 0){
+            vacio.style.display = "block";
+        }else{
+            vacio.style.display = "none";
+        }
+    }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(controlarVistaVacia, 500);
+});
+</script>
+
+</body>
+</html>
+
+

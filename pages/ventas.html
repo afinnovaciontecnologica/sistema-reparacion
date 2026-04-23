@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ventas</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="/css/ventas.css">
+
+<!-- ICONOS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h2>🛠 Sistema</h2>
+
+<ul>
+    <!-- ROOT -->
+    <li>
+        <a href="/dashboard.html">
+            <i class="fa fa-home"></i> Inicio
+        </a>
+    </li>
+
+    <!-- MISMA CARPETA -->
+    <li>
+        <a href="clientes.html">
+            <i class="fa fa-users"></i> Clientes
+        </a>
+    </li>
+
+    <li>
+        <a href="cotizaciones.html">
+            <i class="fa fa-file-alt"></i> Cotización
+        </a>
+    </li>
+
+    <li>
+        <a href="productos.html">
+            <i class="fa fa-box"></i> Productos
+        </a>
+    </li>
+
+    <li>
+        <a href="reparaciones.html">
+            <i class="fa fa-tools"></i> Reparaciones
+        </a>
+    </li>
+
+    <li>
+        <a href="ventas.html" class="active">
+            <i class="fa fa-shopping-cart"></i> Ventas
+        </a>
+    </li>
+
+    <li>
+        <a href="historial.html">
+            <i class="fa fa-clock"></i> Historial
+        </a>
+    </li>
+
+    <li>
+        <a href="#" id="btnLogout">
+            <i class="fa fa-sign-out-alt"></i> Salir
+        </a>
+    </li>
+</ul>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<h1>🛒 Ventas</h1>
+
+<!-- BARRA -->
+<div class="barra-ventas">
+
+    <select id="tipoComprobante">
+        <option value="">Comprobante</option>
+        <option value="boleta">Boleta</option>
+        <option value="factura">Factura</option>
+    </select>
+
+    <div class="buscador-cliente" id="contenedorCliente" style="display:none;">
+        <input type="text" id="buscarCliente" placeholder="Buscar cliente...">
+        <div id="listaClientes" class="lista-clientes"></div>
+        <small id="mensajeCliente"></small>
+    </div>
+
+    <div class="datos-cliente" style="display:none;" id="datosCliente">
+        <input type="text" id="clienteTelefono" readonly>
+        <input type="text" id="clienteCorreo" readonly>
+    </div>
+
+    <input type="text" id="ruc" placeholder="RUC" style="display:none;">
+    <input type="text" id="razonSocial" placeholder="Razón Social" style="display:none;">
+
+    <select id="categoria"></select>
+    <select id="subcategoria"></select>
+    <select id="producto"></select>
+
+    <input type="text" id="descripcion" readonly>
+    <input type="number" id="precio" readonly>
+    <input type="number" id="cantidad" value="1" min="1">
+    <input type="text" id="stock" readonly>
+
+    <button onclick="agregarCarrito()">
+        <i class="fa fa-cart-plus"></i>
+    </button>
+
+</div>
+
+<!-- TABLA -->
+<table>
+<thead>
+<tr>
+<th>Producto</th>
+<th>Precio</th>
+<th>Cantidad</th>
+<th>Subtotal</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody id="carrito"></tbody>
+</table>
+
+<!-- TOTAL -->
+<h2>Total: S/. <span id="total">0.00</span></h2>
+
+<!-- MÉTODO PAGO -->
+<div class="metodo-pago">
+    <label>Método de pago:</label>
+    <div class="chips-pago">
+        <button class="chip" data-pago="yape">📱 Yape</button>
+        <button class="chip" data-pago="plin">💜 Plin</button>
+        <button class="chip" data-pago="efectivo">💵 Efectivo</button>
+    </div>
+</div>
+
+<!-- FINALIZAR -->
+<button class="btn-finalizar" onclick="finalizarVenta()">
+    <i class="fa fa-check"></i> Finalizar Venta
+</button>
+
+</div>
+
+<!-- JS -->
+<script src="/js/ventas.js"></script>
+<script src="/js/roles.js"></script>
+
+<!-- LOGOUT -->
+<script>
+document.getElementById("btnLogout").addEventListener("click", function(e){
+    e.preventDefault();
+    localStorage.removeItem("rol");
+    window.location.href = "/login.html";
+});
+</script>
+
+<!-- MODAL EDITAR -->
+<div class="modal" id="modalContainer">
+    <div class="modal-content">
+        <h3 id="modalTitulo">Editar</h3>
+        <input type="number" id="modalValor">
+        <div class="modal-botones">
+            <button onclick="confirmarModal()">Aceptar</button>
+            <button onclick="cerrarModal()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<!-- NOTIFICACIONES -->
+<div id="notificacion" class="noti"></div>
+
+<!-- MODAL BOLETA -->
+<div id="modalBoleta" class="modal-boleta">
+    <div class="boleta-box">
+
+        <div id="boletaVista"></div>
+
+        <div class="acciones-boleta">
+            <button onclick="imprimirBoleta()">🖨️ Imprimir</button>
+            <button onclick="descargarPDFManual()">📄 Descargar PDF</button>
+            <button onclick="enviarWhatsApp()">📲 WhatsApp</button>
+            <button onclick="enviarCorreo()">📧 Correo</button>
+            <button onclick="cerrarBoleta()">Cerrar</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- BOLETA -->
+<div id="boletaHTML"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+</body>
+</html>
+
+

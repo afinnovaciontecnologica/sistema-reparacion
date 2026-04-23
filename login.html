@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Reparación</title>
+
+    <!-- FUENTE -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS (RUTAS CORREGIDAS) -->
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/forms.css">
+
+    <meta name="theme-color" content="#0f172a">
+</head>
+
+<body>
+
+    <!-- FONDO -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- CONTENEDOR -->
+    <main class="login-screen">
+
+        <section class="login-card">
+
+            <!-- HEADER -->
+            <header class="login-header">
+                <div class="logo-wrapper">
+                    <img src="./assets/img/Logo.png" alt="Logo" class="main-logo">
+                </div>
+
+                <h1>Bienvenido</h1>
+                <p>Accede al sistema</p>
+            </header>
+
+            <!-- ERROR -->
+            <div id="errorMsg" class="error-banner" style="display:none;"></div>
+
+            <!-- FORM -->
+            <form id="loginForm" autocomplete="off">
+
+                <!-- USUARIO -->
+                <div class="form-group">
+                    <label for="usuario">Correo</label>
+                    <input type="email" id="usuario" placeholder="correo@gmail.com" required>
+                </div>
+
+                <!-- PASSWORD -->
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" required>
+                </div>
+
+                <!-- BOTÓN -->
+                <button type="submit" class="btn-primary">
+                    Ingresar
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <!-- JS (MODULAR) -->
+    <script type="module" src="./js/auth.js"></script>
+
+</body>
+</html>
+
+
+
+
+

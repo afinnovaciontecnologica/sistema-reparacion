@@ -1,0 +1,259 @@
+/* ===== RESET ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter', sans-serif;
+}
+
+/* ===== BODY ===== */
+body{
+    background:linear-gradient(135deg,#020617,#0f172a);
+    color:white;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar{
+    width:220px;
+    height:100vh;
+    background:#020617;
+    padding:20px;
+    position:fixed;
+    top:0;
+    left:0;
+    border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar h2{
+    margin-bottom:25px;
+    color:#38bdf8;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar ul li{
+    margin:12px 0;
+}
+
+.sidebar ul li a{
+    text-decoration:none;
+    color:#94a3b8;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.sidebar ul li a:hover{
+    background:rgba(56,189,248,0.1);
+    color:#38bdf8;
+}
+
+/* ===== MAIN ===== */
+.main{
+    margin-left:220px;
+    padding:40px 20px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.main > *{
+    width:100%;
+    max-width:1000px;
+}
+
+/* ===== HEADER ===== */
+.header h1{
+    font-size:28px;
+    margin-bottom:5px;
+}
+
+.header p{
+    color:#94a3b8;
+    margin-bottom:25px;
+}
+
+/* ===== CARD FORM ===== */
+.card-form{
+    background:#0f172a;
+    padding:25px;
+    border-radius:16px;
+    margin-bottom:25px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.6);
+    border:1px solid rgba(255,255,255,0.05);
+}
+
+.card-form h3{
+    margin-bottom:15px;
+    color:#38bdf8;
+}
+
+/* GRID */
+.grid-form{
+    display:grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap:15px;
+}
+
+/* GROUP */
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+/* LABEL */
+.form-group label{
+    font-size:13px;
+    color:#94a3b8;
+}
+
+/* INPUTS */
+.form-group input,
+.form-group select{
+    height:45px;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid rgba(255,255,255,0.05);
+    background:#020617;
+    color:white;
+}
+
+/* FOCUS */
+.form-group input:focus,
+.form-group select:focus{
+    outline:none;
+    border:1px solid #38bdf8;
+}
+
+/* FILE */
+input[type="file"]{
+    padding:6px;
+}
+
+/* PREVIEW */
+.preview{
+    text-align:center;
+    margin-top:15px;
+}
+
+.preview img{
+    max-width:120px;
+    border-radius:10px;
+    display:none;
+}
+
+/* BOTÓN */
+.btn-guardar{
+    width:100%;
+    margin-top:20px;
+    padding:14px;
+    background:linear-gradient(135deg,#38bdf8,#22d3ee);
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn-guardar:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(56,189,248,0.4);
+}
+
+/* ===== BUSCADOR ===== */
+.buscador{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#0f172a;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:20px;
+}
+
+.buscador input{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:white;
+    outline:none;
+}
+
+/* ===== TABLA ===== */
+.tabla{
+    background:#020617;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 15px 40px rgba(0,0,0,0.6);
+}
+
+.tabla table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+/* CABECERA */
+.tabla th{
+    padding:14px;
+    font-size:12px;
+    color:#38bdf8;
+    text-transform:uppercase;
+}
+
+/* FILAS */
+.tabla td{
+    padding:14px;
+    text-align:center;
+    border-top:1px solid rgba(255,255,255,0.05);
+}
+
+/* HOVER */
+.tabla tr:hover{
+    background:rgba(56,189,248,0.08);
+}
+
+/* IMAGEN */
+.tabla img{
+    width:50px;
+    border-radius:8px;
+}
+
+/* ===== BOTONES ===== */
+.btn{
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+/* EDITAR */
+.editar{
+    background:#22c55e;
+}
+
+/* ELIMINAR */
+.eliminar{
+    background:#ef4444;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .grid-form{
+        grid-template-columns:1fr;
+    }
+}

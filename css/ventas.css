@@ -1,0 +1,1216 @@
+/* =====================
+   RESET
+===================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter', sans-serif;
+}
+
+/* =====================
+   BODY
+===================== */
+body{
+    display:flex;
+    background:#0f172a;
+    color:white;
+}
+
+/* =====================
+   SIDEBAR
+===================== */
+.sidebar{
+    width:230px;
+    height:100vh;
+    background:#020617;
+    padding:20px;
+    border-right:1px solid #1e293b;
+}
+
+.sidebar h2{
+    margin-bottom:20px;
+    color:#38bdf8;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar a{
+    color:#94a3b8;
+    text-decoration:none;
+    display:block;
+    margin:10px 0;
+    padding:10px;
+    border-radius:8px;
+    transition:0.3s;
+}
+
+.sidebar a:hover{
+    background:#1e293b;
+    color:#38bdf8;
+}
+
+.sidebar .active{
+    color:#38bdf8;
+    background:#1e293b;
+}
+
+/* =====================
+   MAIN
+===================== */
+.main{
+    flex:1;
+    padding:25px;
+}
+
+.main h1{
+    margin-bottom:20px;
+    color:#e2e8f0;
+}
+
+/* =====================
+   BARRA VENTAS
+===================== */
+.barra-ventas{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+    background:#020617;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    border:1px solid #1e293b;
+}
+
+/* =====================
+   INPUTS Y SELECT
+===================== */
+input,
+select{
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    background:#1e293b;
+    color:white;
+    outline:none;
+    min-width:130px;
+    flex:1;
+    transition:0.2s;
+}
+
+input::placeholder{
+    color:#64748b;
+}
+
+input:focus,
+select:focus{
+    border:1px solid #38bdf8;
+    background:#020617;
+    box-shadow:0 0 0 2px rgba(56,189,248,0.2);
+}
+
+input[readonly]{
+    background:#020617;
+    color:#94a3b8;
+}
+
+/* =====================
+   INPUTS AJUSTES
+===================== */
+#descripcion{
+    min-width:180px;
+}
+
+#stock{
+    width:90px;
+    text-align:center;
+    font-weight:bold;
+    color:#22c55e;
+}
+
+/* =====================
+   BUSCADOR CLIENTE
+===================== */
+.buscador-cliente{
+    position:relative;
+    min-width:200px;
+    flex:1;
+}
+
+#buscarCliente{
+    transition:0.3s;
+}
+
+#buscarCliente:focus{
+    transform:scale(1.02);
+}
+
+/* LISTA CLIENTES */
+.lista-clientes{
+    position:absolute;
+    top:45px;
+    width:100%;
+    background:#020617;
+    border:1px solid #1e293b;
+    border-radius:8px;
+    max-height:200px;
+    overflow:auto;
+    z-index:100;
+    box-shadow:0 5px 15px rgba(0,0,0,0.5);
+    animation:fadeIn 0.2s ease-in-out;
+}
+
+.lista-clientes div{
+    padding:10px;
+    cursor:pointer;
+    transition:0.2s;
+    border-bottom:1px solid #1e293b;
+}
+
+.lista-clientes div:last-child{
+    border-bottom:none;
+}
+
+.lista-clientes div:hover{
+    background:#1e293b;
+    color:#38bdf8;
+    padding-left:15px;
+}
+
+/* SCROLL */
+.lista-clientes::-webkit-scrollbar{
+    width:6px;
+}
+
+.lista-clientes::-webkit-scrollbar-thumb{
+    background:#1e293b;
+    border-radius:10px;
+}
+
+/* =====================
+   MENSAJES CLIENTE (🔥 MEJORADO)
+===================== */
+#mensajeCliente{
+    font-size:12px;
+    margin-top:6px;
+    font-weight:500;
+    animation:fadeIn 0.3s ease;
+    text-decoration:none !important; /* 🔥 elimina tachado */
+}
+
+/* MENSAJE OK */
+.msg-ok{
+    color:#22c55e;
+    background:rgba(34,197,94,0.1);
+    padding:6px 10px;
+    border-radius:6px;
+    font-weight:600;
+    display:inline-block;
+    margin-top:4px;
+    text-decoration:none !important;
+}
+
+/* MENSAJE ERROR */
+.msg-error{
+    color:#ef4444;
+    background:rgba(239,68,68,0.1);
+    padding:6px 10px;
+    border-radius:6px;
+    font-weight:600;
+    display:inline-block;
+    margin-top:4px;
+    text-decoration:none !important;
+}
+
+/* MENSAJE WARNING */
+.msg-warning{
+    color:#facc15;
+    background:rgba(250,204,21,0.1);
+    padding:6px 10px;
+    border-radius:6px;
+    font-weight:600;
+    display:inline-block;
+    margin-top:4px;
+    text-decoration:none !important;
+}
+
+/* =====================
+   DATOS CLIENTE
+===================== */
+.datos-cliente{
+    display:flex;
+    gap:10px;
+    width:100%;
+    margin-top:5px;
+}
+
+.datos-cliente input{
+    background:#020617;
+    color:#38bdf8;
+    font-weight:bold;
+    border:1px solid #1e293b;
+}
+
+/* =====================
+   BOTONES
+===================== */
+button{
+    margin:2px;
+    padding:6px 10px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+/* FINALIZAR */
+.btn-finalizar{
+    margin-top:15px;
+    background:#22c55e;
+    color:#000;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.btn-finalizar:hover{
+    background:#16a34a;
+}
+
+/* =====================
+   TABLA
+===================== */
+table{
+    width:100%;
+    background:#020617;
+    border-collapse:collapse;
+    border-radius:12px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+th, td{
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#1e293b;
+    color:#38bdf8;
+    font-weight:600;
+}
+
+td{
+    border-top:1px solid #1e293b;
+}
+
+tr:hover td{
+    background:#1e293b;
+}
+
+/* =====================
+   TOTAL
+===================== */
+h2{
+    margin-top:15px;
+}
+
+#total{
+    font-size:20px;
+    font-weight:bold;
+    color:#22c55e;
+}
+
+/* =====================
+   MODAL
+===================== */
+.modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    backdrop-filter:blur(4px);
+}
+
+.modal-content{
+    background:#0f172a;
+    padding:20px;
+    border-radius:10px;
+    width:300px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+}
+
+.modal-content input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:6px;
+    border:none;
+}
+
+.modal-botones button:first-child{
+    background:#22c55e;
+}
+
+.modal-botones button:last-child{
+    background:#ef4444;
+}
+
+/* =====================
+   BOLETA
+===================== */
+.boleta-container{
+    position:fixed;
+    right:20px;
+    top:20px;
+    width:320px;
+    background:#020617;
+    border:1px solid #1e293b;
+    padding:10px;
+    z-index:999;
+    border-radius:10px;
+    color:white;
+}
+
+.boleta{
+    font-family:monospace;
+    font-size:12px;
+}
+
+.boleta table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.boleta th,
+.boleta td{
+    padding:4px;
+    font-size:11px;
+}
+
+.boleta th{
+    border-bottom:1px dashed #38bdf8;
+}
+
+.boleta hr{
+    border:none;
+    border-top:1px dashed #38bdf8;
+    margin:5px 0;
+}
+
+.totales{
+    text-align:right;
+}
+
+.footer{
+    text-align:center;
+}
+
+/* =====================
+   ANIMACIONES
+===================== */
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(-5px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =====================
+   RESPONSIVE
+===================== */
+@media(max-width:768px){
+
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+        height:auto;
+        display:flex;
+        justify-content:space-around;
+    }
+
+    .sidebar h2{
+        display:none;
+    }
+
+    .sidebar a{
+        margin:5px;
+        font-size:14px;
+    }
+
+    .barra-ventas{
+        flex-direction:column;
+    }
+
+    input, select, button{
+        width:100%;
+    }
+
+    table{
+        font-size:14px;
+    }
+}
+
+/* =====================
+   TABLA MEJORADA
+===================== */
+.main table{
+    width:100%;
+    background:#020617;
+    border-collapse:separate;
+    border-spacing:0 8px;
+}
+
+tbody tr{
+    background:#020617;
+    transition:0.3s;
+    border-radius:10px;
+}
+
+tbody tr:hover{
+    background:#1e293b;
+    transform:scale(1.01);
+}
+
+/* CELDAS */
+td{
+    padding:14px;
+    text-align:center;
+    border:none;
+}
+
+/* =====================
+   ACCIONES (BOTONES PRO)
+===================== */
+td:last-child{
+    display:flex;
+    gap:6px;
+    justify-content:center;
+}
+
+/* BOTON EDITAR */
+td button:nth-child(1){
+    background:#facc15;
+    color:#000;
+    font-weight:bold;
+}
+
+button:nth-child(1):hover{
+    background:#eab308;
+}
+
+/* BOTON DESCUENTO */
+td button:nth-child(2){
+    background:#06b6d4;
+    color:white;
+    font-weight:bold;
+}
+
+button:nth-child(2):hover{
+    background:#0891b2;
+}
+
+/* BOTON ELIMINAR */
+td button:nth-child(3){
+    background:#ef4444;
+    color:white;
+    font-weight:bold;
+}
+
+button:nth-child(3):hover{
+    background:#dc2626;
+}
+
+/* EFECTO BOTONES */
+td button{
+    padding:6px 10px;
+    border-radius:6px;
+    border:none;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+td button:hover{
+    transform:scale(1.1);
+}
+
+/* =====================
+   TOTAL MÁS PRO
+===================== */
+h2{
+    margin-top:20px;
+    font-size:22px;
+}
+
+#total{
+    color:#22c55e;
+    font-size:24px;
+    font-weight:bold;
+}
+
+/* =====================
+   BOTON FINALIZAR PRO
+===================== */
+.btn-finalizar{
+    margin-top:15px;
+    background:linear-gradient(135deg,#22c55e,#16a34a);
+    color:#000;
+    font-size:16px;
+    font-weight:bold;
+    padding:10px 15px;
+    border-radius:8px;
+}
+
+.btn-finalizar:hover{
+    transform:scale(1.05);
+    box-shadow:0 5px 15px rgba(34,197,94,0.4);
+}
+
+/* NOTIFICACIONES PRO */
+.noti{
+    position:fixed;
+    top:20px;
+    right:20px;
+    background:#020617;
+    color:white;
+    padding:14px 20px;
+    border-radius:10px;
+    font-size:14px;
+    font-weight:500;
+    box-shadow:0 10px 25px rgba(0,0,0,0.5);
+    opacity:0;
+    transform:translateY(-20px);
+    transition:0.3s;
+    z-index:9999;
+}
+
+/* TIPOS DE NOTIFICACIÓN */
+.noti.ok{
+    border-left:5px solid #22c55e;
+}
+
+.noti.error{
+    border-left:5px solid #ef4444;
+}
+
+.noti.warning{
+    border-left:5px solid #facc15;
+}
+
+.noti.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.metodo-pago{
+    margin-top:15px;
+    background:#020617;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #1e293b;
+    display:flex;
+    gap:10px;
+    align-items:center;
+}
+
+.metodo-pago label{
+    color:#38bdf8;
+    font-weight:bold;
+}
+
+.metodo-pago{
+    margin-top:15px;
+    background:#020617;
+    padding:10px;
+    border-radius:10px;
+    border:1px solid #1e293b;
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    /* 🔥 IMPORTANTE */
+    width: fit-content; /* evita que se estire */
+}
+
+.metodo-pago select{
+    flex:unset;         /* 🔥 rompe el flex:1 global */
+    width:180px;        /* tamaño ideal */
+    min-width:150px;
+    max-width:200px;
+}
+
+/* =====================
+   CHIPS METODO PAGO
+===================== */
+.chips-pago{
+    display:flex;
+    gap:10px;
+}
+
+/* BOTONES */
+.chip{
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid #1e293b;
+    background:#020617;
+    color:#94a3b8;
+    cursor:pointer;
+    transition:0.3s;
+    font-weight:600;
+}
+
+/* HOVER */
+.chip:hover{
+    background:#1e293b;
+    color:#38bdf8;
+}
+
+/* ACTIVO */
+.chip.activo{
+    background:#38bdf8;
+    color:#020617;
+    border-color:#38bdf8;
+    box-shadow:0 0 10px rgba(56,189,248,0.5);
+}
+
+
+
+
+
+
+.modalBoleta{
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+
+
+@keyframes aparecer{
+    from{
+        transform: scale(0.8);
+        opacity:0;
+    }
+    to{
+        transform: scale(1);
+        opacity:1;
+    }
+}
+
+/* ================= BOLETA NUEVA ================= */
+.modal-boleta{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.boleta-box{
+    width: 380px;
+    max-width: 95%;
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes zoom{
+    from{transform:scale(0.8);opacity:0;}
+    to{transform:scale(1);opacity:1;}
+}
+
+#boletaHTML{
+    max-height: none;
+    overflow: visible;
+}
+
+.ticket{
+    font-family:monospace;
+    font-size:12px;
+    color:#000;
+}
+
+.ticket hr{
+    border:none;
+    border-top:1px dashed #000;
+    margin:5px 0;
+}
+
+.ticket table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.ticket th,
+.ticket td{
+    font-size:11px;
+    padding:3px;
+    text-align:center;
+}
+
+.acciones-boleta{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.acciones-boleta button{
+    flex: 1 1 45%;
+    max-width: 150px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.modal-boleta {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 380px;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: flex-end;
+    z-index: 9999;
+}
+
+.boleta-box {
+    width: 100%;
+    background: #fff;
+    height: 100%;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.acciones-boleta{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.ticket {
+    font-family: monospace;
+    width: 100%;
+    font-size: 12px;
+}
+
+.ticket h2 {
+    font-size: 16px;
+}
+
+.ticket table {
+    width: 100%;
+}
+
+.ticket th, .ticket td {
+    padding: 4px;
+    text-align: center;
+}
+
+.ticket th {
+    border-bottom: 1px dashed #000;
+}
+
+.ticket hr {
+    border: none;
+    border-top: 1px dashed #000;
+    margin: 5px 0;
+}
+
+
+
+.header {
+    text-align: center;
+}
+
+.logo{
+    width: 120px;
+    display: block;
+    margin: 0 auto 5px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+
+
+th, td {
+    padding: 4px;
+    text-align: center;
+}
+
+hr {
+    border: none;
+    border-top: 1px dashed black;
+}
+
+.totales {
+    text-align: right;
+}
+
+.totales .desc {
+    color: red;
+}
+
+.totales h3 {
+    background: black;
+    color: white;
+    padding: 5px;
+}
+
+.ticket table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ticket th {
+    background: #000;
+    color: #fff;
+    padding: 5px;
+}
+
+.ticket td {
+    padding: 4px;
+    border-bottom: 1px dashed #999;
+}
+
+.ticket .top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
+
+.ticket table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+.ticket th {
+    background: #000;
+    color: #fff;
+    padding: 6px;
+    text-align: center;
+}
+
+.ticket td {
+    color: #000; /* 🔥 CLAVE */
+    padding: 6px;
+    border-bottom: 1px dashed #999;
+}
+
+.ticket {
+    background: #fff;
+    color: #000;
+    padding: 10px;
+    font-family: monospace;
+}
+
+/* 🔥 FIX BOLETA (evitar sombreado) */
+.ticket tr:hover td{
+    background: transparent !important;
+}
+
+.ticket table,
+.ticket tr,
+.ticket td,
+.ticket th {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+
+
+@media print {
+
+    @page {
+        size: A4;
+        margin: 10mm;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #boletaHTML, #boletaHTML * {
+        visibility: visible;
+    }
+
+    #boletaHTML {
+        display: block !important; /* 🔥 CLAVE */
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 350px;
+        background: #fff;
+        padding: 10px;
+    }
+}
+
+
+
+#boletaHTML{
+    display: none;
+}
+
+@media print {
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+
+    html, body {
+        height: auto;
+        overflow: hidden;
+    }
+
+    body * {
+        visibility: hidden;
+    }
+
+    #boletaHTML, #boletaHTML * {
+        visibility: visible;
+    }
+
+    #boletaHTML {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
+        width: 350px;
+        background: #fff;
+        padding: 10px;
+
+        /* 🔥 CLAVE FINAL */
+        page-break-after: avoid !important;
+        page-break-before: avoid !important;
+        page-break-inside: avoid !important;
+    }
+
+}
+
+@media print {
+    .modal-boleta,
+    .boleta-box,
+    .main,
+    .sidebar {
+        display: none !important;
+    }
+}
+
+.header-empresa{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.header-empresa h2{
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.header-empresa p{
+    margin: 2px 0;
+    font-size: 12px;
+}
+
+.total{
+    font-weight: bold;
+    font-size: 14px;
+    background: #000;
+    color: #fff;
+    padding: 5px;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.ticket{
+    text-align: center;
+    font-family: monospace;
+}
+
+
+.ticket{
+    width: 300px;
+    margin: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #000;
+}
+
+/* 🔥 AGREGA ESTO AQUÍ */
+.ticket table{
+    border-spacing:0 !important;
+}
+
+.ticket tr:hover td{
+    background: transparent !important;
+}
+
+/* LOGO */
+.logo{
+    width: 100px;
+    display: block;
+    margin: 0 auto 5px;
+}
+
+/* HEADER */
+.header-empresa{
+    text-align: center;
+}
+
+.header-empresa h2{
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.header-empresa p{
+    margin: 2px 0;
+}
+
+/* LINEA */
+.linea{
+    border-top: 1px dashed #000;
+    margin: 8px 0;
+}
+
+/* INFO */
+.boleta-info{
+    text-align: center;
+}
+
+/* TABLA */
+.detalle{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detalle th{
+    text-align: left;
+    font-size: 11px;
+}
+
+.detalle td{
+    font-size: 11px;
+}
+
+/* TOTALES */
+.totales{
+    text-align: right;
+}
+
+.descuento{
+    color: red;
+}
+
+.total{
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* PAGO */
+.pago{
+    text-align: center;
+    font-weight: bold;
+}
+
+/* MENSAJE */
+.gracias{
+    text-align: center;
+    margin-top: 5px;
+}
+
+/* QR */
+.qr{
+    text-align: center;
+    margin-top: 5px;
+}
+
+.qr img{
+    width: 100px;
+}
+
+.acciones-boleta button:nth-child(1){
+    background:#3b82f6;
+    color:white;
+}
+
+.acciones-boleta button:nth-child(2){
+    background:#10b981;
+    color:white;
+}
+
+.acciones-boleta button:nth-child(3){
+    background:#25D366;
+    color:white;
+}
+
+.acciones-boleta button:nth-child(4){
+    background:#f59e0b;
+    color:white;
+}
+
+.acciones-boleta button:nth-child(5){
+    background:#ef4444;
+    color:white;
+}
+
+.acciones-boleta button:hover{
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.boleta-box{
+    padding-bottom: 20px;
+}

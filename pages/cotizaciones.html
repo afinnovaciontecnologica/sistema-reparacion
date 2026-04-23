@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cotizaciones</title>
+
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/cotizaciones.css">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+    <h2>🛠 Sistema</h2>
+
+<ul>
+    <li><a href="/dashboard.html" id="menu-inicio"><i class="fa fa-home"></i> Inicio</a></li>
+    <li><a href="productos.html" id="menu-productos"><i class="fa fa-box"></i> Productos</a></li>
+    <li><a href="clientes.html" id="menu-clientes"><i class="fa fa-users"></i> Clientes</a></li>
+    <li><a href="reparaciones.html" id="menu-reparaciones"><i class="fa fa-tools"></i> Reparaciones</a></li>
+    <li><a href="ventas.html" id="menu-ventas"><i class="fa fa-shopping-cart"></i> Ventas</a></li>
+    <li><a href="cotizaciones.html" id="menu-cotizacion" class="active"><i class="fa fa-file"></i> Cotización</a></li>
+    <li><a href="historial.html" id="menu-historial"><i class="fa fa-clock"></i> Historial</a></li>
+    <li><a href="#" id="btnLogout"><i class="fa fa-sign-out-alt"></i> Salir</a></li>
+</ul>
+
+</aside>
+
+<main class="main">
+
+<!-- HEADER -->
+<div class="header">
+    <h1><i class="fa fa-file"></i> Cotizaciones</h1>
+    <p>Genera cotizaciones profesionales</p>
+</div>
+
+<!-- FORM -->
+<div class="card-form">
+    <div class="grid-form">
+
+        <div class="form-group">
+            <label>Cliente</label>
+            <select id="cliente"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Producto</label>
+            <select id="producto"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Cantidad</label>
+            <input type="number" id="cantidad" value="1">
+        </div>
+
+    </div>
+
+    <button class="btn-agregar" onclick="agregarItem()">
+        <i class="fa fa-plus"></i> Agregar Producto
+    </button>
+</div>
+
+<!-- DETALLE -->
+<div class="tabla">
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cant</th>
+                <th>Subtotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody id="detalle"></tbody>
+    </table>
+</div>
+
+<!-- TOTAL -->
+<div class="total-box">
+
+    <!-- TOTALES -->
+    <div class="totales-box">
+        
+        <div class="linea-total">
+            <span>Subtotal</span>
+            <span id="subtotal">S/ 0.00</span>
+        </div>
+
+        <div class="linea-total">
+            <span>IGV (18%)</span>
+            <span id="igv">S/ 0.00</span>
+        </div>
+
+        <div class="linea-total total-final">
+            <span>Total</span>
+            <span id="totalFinal">S/ 0.00</span>
+        </div>
+
+    </div>
+
+    <!-- BOTONES -->
+    <div class="acciones-box">
+        <button class="btn-guardar">
+            <i class="fa fa-save"></i> Guardar
+        </button>
+
+        <button class="btn-limpiar">
+            <i class="fa fa-broom"></i> Limpiar
+        </button>
+
+        <button class="btn-reset">
+            <i class="fa fa-rotate-left"></i> Reiniciar
+        </button>
+    </div>
+
+</div>
+
+  
+</div>
+
+<!-- HISTORIAL -->
+<div class="tabla">
+    <h3>Historial de Cotizaciones</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody id="listaCotizaciones"></tbody>
+    </table>
+</div>
+
+</main>
+
+<!-- JS PRINCIPAL -->
+
+<script src="/js/cotizaciones.js"></script>
+
+<!-- LINK ACTIVO -->
+
+<script>
+document.querySelectorAll("aside a").forEach(link=>{
+    if(link.href === window.location.href){
+        link.style.background = "rgba(56,189,248,0.2)";
+        link.style.color = "#38bdf8";
+    }
+});
+</script>
+
+<!-- LOGOUT -->
+
+<script>
+document.getElementById("btnLogout").addEventListener("click", function(e){
+    e.preventDefault();
+    localStorage.removeItem("rol");
+    window.location.href = "/login.html";
+});
+</script>
+
+<!-- MODAL -->
+
+<div id="modalPDF" class="modal">
+    <div class="modal-content">
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<!-- PDF -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- ROLES -->
+
+<script src="/js/roles.js"></script>
+
+</body>
+</html>
+
+

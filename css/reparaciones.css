@@ -1,0 +1,883 @@
+/* =====================
+RESET
+===================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Arial, sans-serif;
+}
+
+/* =====================
+BODY
+===================== */
+body{
+    display:flex;
+    background:#0f172a;
+    color:#e2e8f0;
+}
+
+/* =====================
+SIDEBAR
+===================== */
+.sidebar{
+    width:240px;
+    height:100vh;
+    background:linear-gradient(180deg,#020617,#0f172a);
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    border-right:1px solid #1e293b;
+}
+
+.sidebar h2{
+    color:#38bdf8;
+    margin-bottom:25px;
+    font-size:20px;
+}
+
+.sidebar a{
+    color:#94a3b8;
+    text-decoration:none;
+    padding:12px;
+    border-radius:8px;
+    margin-bottom:6px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    transition:0.2s;
+}
+
+.sidebar a:hover{
+    background:#1e293b;
+    color:#38bdf8;
+    transform:translateX(5px);
+}
+
+.sidebar .active{
+    background:#38bdf8;
+    color:#020617;
+    font-weight:bold;
+}
+
+/* =====================
+MAIN
+===================== */
+.main{
+    flex:1;
+    padding:25px;
+}
+
+h1{
+    margin-bottom:20px;
+}
+
+/* =====================
+CARDS
+===================== */
+.card{
+    background:#020617;
+    padding:18px;
+    border-radius:12px;
+    margin-bottom:18px;
+    border:1px solid #1e293b;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+
+.card h3{
+    margin-bottom:12px;
+    color:#38bdf8;
+    font-size:16px;
+}
+
+/* =====================
+GRID
+===================== */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:12px;
+}
+
+/* =====================
+INPUTS / SELECT / TEXTAREA
+===================== */
+input, select, textarea{
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #334155;
+    background:#0f172a;
+    color:#e2e8f0;
+    outline:none;
+    transition:all 0.2s ease;
+}
+
+/* PLACEHOLDER */
+input::placeholder,
+textarea::placeholder{
+    color:#94a3b8;
+}
+
+/* FOCUS PRO */
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#38bdf8;
+    box-shadow:0 0 8px rgba(56,189,248,0.4);
+    transform:scale(1.02);
+}
+
+/* =====================
+SELECT MODERNO
+===================== */
+select{
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    padding-right:35px;
+
+    background-image:url("data:image/svg+xml;utf8,<svg fill='%2394a3b8' height='20' viewBox='0 0 20 20' width='20'><path d='M5 7l5 5 5-5H5z'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 10px center;
+    background-size:18px;
+
+    cursor:pointer;
+}
+
+select:hover{
+    border-color:#38bdf8;
+}
+
+/* OPCION VACIA */
+select option[value=""]{
+    color:#94a3b8;
+}
+
+/* =====================
+TEXTAREA
+===================== */
+textarea{
+    grid-column: span 2;
+    resize:none;
+}
+
+/* =====================
+CLIENTE INFO
+===================== */
+.cliente-info{
+    background:#0f172a;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #334155;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+    font-size:14px;
+}
+
+.cliente-info span{
+    color:#38bdf8;
+    font-weight:bold;
+}
+
+/* =====================
+MENSAJE CLIENTE
+===================== */
+.mensaje{
+    margin-top:6px;
+    font-size:13px;
+}
+
+/* =====================
+ACCESORIOS
+===================== */
+.accesorios{
+    margin-top:12px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.accesorios label{
+    cursor:pointer;
+    font-size:14px;
+    transition:0.2s;
+}
+
+.accesorios label:hover{
+    color:#38bdf8;
+}
+
+/* =====================
+BUTTON
+===================== */
+button{
+    background:#38bdf8;
+    border:none;
+    padding:12px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:all 0.2s ease;
+}
+
+button:hover{
+    background:#0ea5e9;
+    transform:scale(1.05);
+    box-shadow:0 0 10px rgba(56,189,248,0.5);
+}
+
+/* =====================
+TABLA
+===================== */
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:10px;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+th, td{
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#020617;
+    color:#38bdf8;
+    font-weight:600;
+}
+
+td{
+    border-bottom:1px solid #1e293b;
+}
+
+tr{
+    transition:0.2s;
+}
+
+tr:hover{
+    background:#1e293b;
+}
+
+/* =====================
+ESTADOS
+===================== */
+.estado-pendiente{
+    color:#94a3b8;
+    font-weight:bold;
+}
+
+.estado-enproceso{
+    color:#f59e0b;
+    font-weight:bold;
+}
+
+.estado-terminado{
+    color:#22c55e;
+    font-weight:bold;
+}
+
+/* =====================
+SCROLL
+===================== */
+::-webkit-scrollbar{
+    width:6px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#38bdf8;
+    border-radius:10px;
+}
+
+/* =====================
+RESPONSIVE
+===================== */
+@media(max-width:768px){
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        padding:15px;
+    }
+
+    textarea{
+        grid-column: span 1;
+    }
+}
+
+.servicios-box{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    gap:10px;
+
+    margin-top:10px;
+    padding:12px;
+
+    background:#0f172a;
+    border-radius:10px;
+    border:1px solid #334155;
+
+    max-height:220px;
+    overflow-y:auto;
+}
+
+.servicios-box label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+
+    background:#020617;
+    padding:8px 10px;
+
+    border-radius:8px;
+    border:1px solid #1e293b;
+
+    cursor:pointer;
+    font-size:13px;
+
+    transition:0.2s;
+}
+
+.servicios-box label:hover{
+    border-color:#38bdf8;
+    color:#38bdf8;
+    transform:scale(1.02);
+}
+
+.servicios-box input{
+    accent-color:#38bdf8;
+    cursor:pointer;
+}
+
+.servicios-box label{
+    justify-content:flex-start;
+}
+
+/* =====================
+SOLUCION BOX PRO
+===================== */
+.solucion-box{
+    margin-top:20px;
+    padding:15px;
+
+    background:#020617;
+    border:1px solid #1e293b;
+    border-radius:12px;
+
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.solucion-box label{
+    font-size:14px;
+    color:#38bdf8;
+    font-weight:bold;
+}
+
+.solucion-box textarea{
+    width:100%;
+    min-height:80px;
+
+    padding:12px;
+    border-radius:8px;
+
+    background:#0f172a;
+    border:1px solid #334155;
+    color:white;
+
+    resize:none;
+}
+
+.servicios-box{
+    margin-bottom:10px;
+}
+
+/* título control */
+.control-title{
+    text-align:center;
+    font-weight:bold;
+    font-size:16px;
+    margin-bottom:5px;
+}
+
+/* =====================
+MODAL CONTROL
+===================== */
+.modal-boleta{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.7);
+
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
+}
+
+.modal-boleta.active{
+    display:flex;
+}
+
+.boleta-box{
+    background:white;
+    color:black;
+    padding:20px;
+    border-radius:10px;
+    width:320px;
+    max-height:90vh;
+    overflow:auto;
+}
+
+.ticket{
+    font-size:13px;
+}
+
+.linea{
+    border-top:1px dashed #999;
+    margin:10px 0;
+}
+
+.gracias{
+    text-align:center;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+.acciones-boleta{
+    margin-top:10px;
+    display:flex;
+    gap:5px;
+    justify-content:space-between;
+}
+
+.acciones-boleta{
+    margin-top:15px;
+    display:flex;
+    gap:10px;
+    justify-content:space-between;
+}
+
+.boleta-box{
+    display:flex;
+    flex-direction:column;
+}
+
+
+
+/* ENCABEZADO */
+.empresa{
+    text-align:center;
+    font-size:11px;
+    line-height:1.4;
+}
+
+.logo{
+    width:55px;
+    margin-bottom:5px;
+}
+
+/* TITULO */
+.titulo{
+    text-align:center;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+/* LINEA */
+.linea{
+    border-top:1px dashed #999;
+    margin:8px 0;
+}
+
+/* BLOQUES */
+.cliente, .equipo{
+    font-size:12px;
+    line-height:1.5;
+}
+
+/* SERVICIOS */
+.seccion ul{
+    padding-left:15px;
+}
+
+/* TOTAL */
+.totales{
+    margin-top:10px;
+    text-align:center;
+    font-size:14px;
+}
+
+.totales strong{
+    display:block;
+    background:#000;
+    color:#fff;
+    padding:6px;
+    border-radius:6px;
+    margin-top:5px;
+}
+
+/* ESTADO */
+.estado{
+    display:inline-block;
+    margin-top:6px;
+    background:#0ea5e9;
+    color:white;
+    padding:4px 10px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+/* GRACIAS */
+.gracias{
+    text-align:center;
+    margin-top:10px;
+    font-size:12px;
+}
+
+.logo{
+    width:50px;
+    margin-bottom:5px;
+}
+
+.empresa{
+    text-align:center;
+    font-size:12px;
+}
+
+.titulo{
+    text-align:center;
+    font-weight:bold;
+}
+
+.linea{
+    border-top:1px dashed #000;
+    margin:10px 0;
+}
+
+.cliente, .equipo, .seccion{
+    font-size:12px;
+}
+
+.seccion ul{
+    padding-left:15px;
+}
+
+.totales{
+    display:flex;
+    justify-content:space-between;
+    font-weight:bold;
+}
+
+.estado{
+    background:#0ea5e9;
+    color:white;
+    padding:3px 8px;
+    border-radius:5px;
+}
+
+.gracias{
+    text-align:center;
+    margin-top:10px;
+    font-size:12px;
+}
+
+.acciones-boleta button{
+    flex:1;
+    padding:10px;
+    border-radius:8px;
+    font-size:13px;
+}
+
+.acciones-boleta button:nth-child(1){
+    background:#3b82f6;
+    color:white;
+}
+
+.acciones-boleta button:nth-child(2){
+    background:#22c55e;
+    color:white;
+}
+
+.acciones-boleta button:nth-child(3){
+    background:#ef4444;
+    color:white;
+}
+
+
+
+.boleta-pro{
+    background:#fff;
+    color:#000;
+    padding:20px;
+    border-radius:12px;
+    width:320px;
+    font-family:'Segoe UI', sans-serif;
+}
+
+.boleta-pro h2{
+    text-align:center;
+    margin-bottom:5px;
+}
+
+.boleta-pro h3{
+    text-align:center;
+    font-size:14px;
+    margin-bottom:10px;
+}
+
+.boleta-pro .top{
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.cliente-box, .equipo-box{
+    background:#f1f5f9;
+    padding:10px;
+    border-radius:8px;
+    margin:8px 0;
+}
+
+.seccion{
+    font-size:13px;
+}
+
+.nota{
+    font-size:12px;
+}
+
+.total-box{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:10px;
+}
+
+.estado{
+    background:#0ea5e9;
+    color:white;
+    padding:4px 10px;
+    border-radius:6px;
+    font-size:12px;
+}
+
+.footer{
+    text-align:center;
+    font-size:11px;
+    margin-top:10px;
+}
+
+/* =====================
+BOLETA CONTROL PRO (LIMPIO)
+===================== */
+
+.ticket-pro{
+    background:#fff;
+    color:#000;
+    padding:20px;
+    border-radius:12px;
+    font-family:monospace;
+    width:320px;
+    margin:auto;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+/* LOGO */
+.logo{
+    width:60px;
+    display:block;
+    margin:0 auto 8px;
+}
+
+/* EMPRESA */
+.empresa{
+    text-align:center;
+    font-size:12px;
+    line-height:1.4;
+}
+
+/* TITULO */
+.titulo{
+    text-align:center;
+    font-weight:bold;
+    margin-top:5px;
+}
+
+/* LINEA */
+.linea{
+    border-top:1px dashed #000;
+    margin:10px 0;
+}
+
+/* BLOQUES */
+.bloque{
+    font-size:12px;
+    line-height:1.5;
+}
+
+.bloque p{
+    margin:3px 0;
+}
+
+/* LISTA */
+ul{
+    padding-left:15px;
+}
+
+/* TOTALES */
+.totales{
+    text-align:right;
+    font-size:13px;
+}
+
+.total{
+    background:#000;
+    color:#fff;
+    padding:6px;
+    text-align:center;
+    margin-top:5px;
+    border-radius:5px;
+}
+
+/* ESTADO */
+.estado{
+    text-align:center;
+    background:#0ea5e9;
+    color:#fff;
+    padding:5px;
+    border-radius:5px;
+    margin-top:10px;
+    font-size:12px;
+}
+
+/* GRACIAS */
+.gracias{
+    text-align:center;
+    margin-top:10px;
+    font-size:12px;
+}
+
+select{
+    font-weight:bold;
+}
+
+select option[value="Pendiente"]{color:#94a3b8;}
+select option[value="En proceso"]{color:#f59e0b;}
+select option[value="Terminado"]{color:#22c55e;}
+
+/* BOTON CONTROL DINAMICO */
+.btn-control{
+    border:none;
+    padding:8px 10px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+    color:#fff;
+    font-weight:bold;
+    transition:0.2s;
+}
+
+/* 🟡 PENDIENTE (gris) */
+.btn-pendiente{
+    background:#64748b;
+}
+
+/* 🟠 EN PROCESO (naranja) */
+.btn-proceso{
+    background:#f59e0b;
+}
+
+/* 🟢 TERMINADO (verde) */
+.btn-terminado{
+    background:#22c55e;
+}
+
+/* HOVER */
+.btn-control:hover{
+    transform:scale(1.05);
+    opacity:0.9;
+}
+
+select{
+    font-weight:bold;
+}
+
+select:has(option[value="Pendiente"]:checked){
+    color:#64748b;
+}
+
+select:has(option[value="En proceso"]:checked){
+    color:#f59e0b;
+}
+
+select:has(option[value="Terminado"]:checked){
+    color:#22c55e;
+}
+
+.resumen-reparaciones{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.card-mini{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    font-weight:bold;
+    text-align:center;
+    color:white;
+}
+
+.pendiente{background:#64748b;}
+.proceso{background:#f59e0b;}
+.terminado{background:#22c55e;}
+
+.filtros{
+    display:flex;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.filtros button{
+    flex:1;
+}
+
+.urgente{
+    background:rgba(239,68,68,0.2); /* rojo */
+}
+
+.medio{
+    background:rgba(245,158,11,0.2); /* naranja */
+}
+
+.header-tabla{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+}
+
+.header-tabla input{
+    max-width:250px;
+}
+
+.btn-eliminar{
+    background:#ef4444;
+    color:white;
+    border:none;
+    padding:8px 12px;
+    border-radius:6px;
+    cursor:pointer;
+}
