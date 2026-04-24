@@ -1,21 +1,17 @@
-// =========================
-// IMPORT FIREBASE APP
-// =========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// =========================
-// CONFIG (PON AQUÍ TUS DATOS REALES)
-// =========================
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "TU_ID",
-  appId: "TU_APP_ID"
+  apiKey: "AIzaSyD3Ekoj25xRpsXkUkTH-m2Nfw6ozELGqcI",
+  authDomain: "sistema-reparacion.firebaseapp.com",
+  projectId: "sistema-reparacion",
+  storageBucket: "sistema-reparacion.firebasestorage.app",
+  messagingSenderId: "1055219511276",
+  appId: "1:1055219511276:web:b1537a0aaa003bff089ac9"
 };
 
-// =========================
-// INIT
-// =========================
-export const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+
+export const auth = getAuth(app);
+export const db = getFirestore(app);
