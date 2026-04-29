@@ -256,27 +256,7 @@ GUARDAR
 /* =============================
 HISTORIAL
 ============================= */
-function mostrarHistorial() {
 
-    if (!historial) return;
-
-    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
-
-    historial.innerHTML = "";
-
-    data.forEach((c, i) => {
-        historial.innerHTML += `
-        <tr>
-            <td>${c.cliente}</td>
-            <td>${c.fecha}</td>
-            <td>${c.total}</td>
-            <td>
-                <button onclick="verCotizacion(${i})">👁</button>
-                <button onclick="eliminarCotizacion(${i})">🗑</button>
-            </td>
-        </tr>`;
-    });
-}
 
 /* =============================
 VER
@@ -667,7 +647,15 @@ function enviarWhatsApp(i){
     const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
     const c = data[i];
 
+    if(!c || !c.telefono){
+        return alert("Teléfono no válido");
+    }
+
     const numero = c.telefono.replace(/\D/g,"");
+
+    if(numero.length < 9){
+        return alert("Número incorrecto");
+    }
 
     let texto = `🧾 *${c.numero}*\n\n`;
     texto += `👤 ${c.cliente}\n📞 ${c.telefono}\n\n`;
@@ -678,7 +666,9 @@ function enviarWhatsApp(i){
 
     texto += `\n💰 TOTAL: ${c.total}`;
 
-    window.open(`https://wa.me/51${numero}?text=${encodeURIComponent(texto)}`);
+    const url = `https://wa.me/51${numero}?text=${encodeURIComponent(texto)}`;
+
+    window.open(url, "_blank");
 }
 
 function editarCotizacion(i){
