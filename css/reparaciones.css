@@ -313,24 +313,26 @@ RESPONSIVE
 
 .servicios-box{
     display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns:repeat(2, 1fr); /* 🔥 2 columnas fijas */
     gap:10px;
 
-    margin-top:10px;
+    margin-top:15px;
+    margin-bottom:15px;
+
     padding:12px;
 
     background:#0f172a;
     border-radius:10px;
     border:1px solid #334155;
-
-    max-height:220px;
-    overflow-y:auto;
 }
 
 .servicios-box label{
     display:flex;
-    align-items:center;
+    align-items:flex-start; /* 🔥 evita que se aplaste */
     gap:6px;
+
+    line-height:1.4;
+    word-break:break-word; /* 🔥 evita corte raro */
 
     background:#020617;
     padding:8px 10px;
@@ -351,13 +353,9 @@ RESPONSIVE
 }
 
 .servicios-box input{
-    accent-color:#38bdf8;
-    cursor:pointer;
+    margin-top:3px;
 }
 
-.servicios-box label{
-    justify-content:flex-start;
-}
 
 /* =====================
 SOLUCION BOX PRO
@@ -395,9 +393,7 @@ SOLUCION BOX PRO
     resize:none;
 }
 
-.servicios-box{
-    margin-bottom:10px;
-}
+
 
 /* título control */
 .control-title{
@@ -418,7 +414,7 @@ MODAL CONTROL
     height:100%;
     background:rgba(0,0,0,0.7);
 
-    display:none;
+   display:none;
     justify-content:center;
     align-items:center;
     z-index:999;
@@ -428,14 +424,9 @@ MODAL CONTROL
     display:flex;
 }
 
-.boleta-box{
-    background:white;
-    color:black;
-    padding:20px;
-    border-radius:10px;
-    width:320px;
-    max-height:90vh;
-    overflow:auto;
+#controlVista{
+    overflow:visible !important;
+    max-height:none !important;
 }
 
 .ticket{
@@ -470,6 +461,8 @@ MODAL CONTROL
 .boleta-box{
     display:flex;
     flex-direction:column;
+    gap:10px; /* 🔥 separación interna */
+    padding-bottom:20px; /* 🔥 espacio abajo */
 }
 
 
@@ -681,16 +674,7 @@ MODAL CONTROL
 BOLETA CONTROL PRO (LIMPIO)
 ===================== */
 
-.ticket-pro{
-    background:#fff;
-    color:#000;
-    padding:20px;
-    border-radius:12px;
-    font-family:monospace;
-    width:320px;
-    margin:auto;
-    box-shadow:0 10px 25px rgba(0,0,0,0.4);
-}
+
 
 /* LOGO */
 .logo{
@@ -880,4 +864,475 @@ select:has(option[value="Terminado"]:checked){
     padding:8px 12px;
     border-radius:6px;
     cursor:pointer;
+}
+
+.accesorios{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.accesorios label{
+    background:#0f172a;
+    padding:6px 10px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+
+
+
+
+
+/* CONTENEDOR */
+.accesorios-box{
+    margin-top:10px;
+}
+
+/* GRID ACCESORIOS */
+.accesorios-grid{
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:10px;
+}
+
+/* CHIP */
+.chip{
+    background:linear-gradient(145deg,#0f172a,#020617);
+    border:1px solid #1e293b;
+    border-radius:12px;
+    padding:12px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.3s;
+    position:relative;
+    overflow:hidden;
+}
+
+/* efecto brillo */
+.chip::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg,transparent,rgba(56,189,248,0.3),transparent);
+    transition:0.4s;
+}
+
+.chip:hover::before{
+    left:100%;
+}
+
+.chip:hover{
+    border-color:#38bdf8;
+    transform:translateY(-3px) scale(1.05);
+    box-shadow:0 8px 20px rgba(56,189,248,0.2);
+}
+
+/* ACTIVO */
+.chip input:checked + span{
+    color:#38bdf8;
+    font-weight:bold;
+}
+
+.chip input:checked{
+    accent-color:#38bdf8;
+}
+
+.chip input:checked ~ span{
+    text-shadow:0 0 8px rgba(56,189,248,0.6);
+}
+
+/* TINTAS */
+.tintas-box{
+    margin-top:12px;
+    display:none;
+    grid-template-columns: repeat(2,1fr);
+    gap:10px;
+}
+
+.tinta{
+    background:#0f172a;
+    border:1px solid #1e293b;
+    border-radius:10px;
+    padding:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.tinta select{
+    background:#020617;
+    color:white;
+    border:1px solid #1e293b;
+    border-radius:6px;
+    padding:4px;
+}
+
+.tinta:nth-child(1){ border-left:4px solid #facc15; } /* amarillo */
+.tinta:nth-child(2){ border-left:4px solid #a855f7; } /* magenta */
+.tinta:nth-child(3){ border-left:4px solid #38bdf8; } /* cyan */
+.tinta:nth-child(4){ border-left:4px solid #000; } /* negro */
+
+.accesorios-grid{
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+/* CONTENEDOR DIAGNOSTICO */
+#solucion{
+    width:100%;
+    min-height:120px;
+
+    padding:12px;
+    margin-top:15px;
+
+    border-radius:10px;
+    border:1px solid #1e293b;
+
+    background:#020617;
+    color:white;
+
+    font-size:13px;
+    line-height:1.5;
+
+    resize:none;
+    overflow:hidden;
+}
+
+/* CADA ITEM */
+#listaServicios label{
+    background:#020617;
+    border:1px solid #1e293b;
+    padding:6px 8px;
+    border-radius:6px;
+    font-size:12px;
+    cursor:pointer;
+    transition:0.2s;
+
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+/* HOVER */
+#listaServicios label:hover{
+    border-color:#38bdf8;
+    background:#0f172a;
+}
+
+/* CHECK ACTIVO */
+#listaServicios input:checked{
+    accent-color:#38bdf8;
+}
+
+/* SEPARACIÓN GENERAL */
+.card{
+    margin-bottom:20px;
+}
+
+.accesorios-box{
+    margin-top:15px;
+    margin-bottom:20px;
+}
+
+.card button{
+    margin:5px 5px 10px 0;
+}
+
+/* SOLUCIÓN DINÁMICA */
+#solucion{
+    width:100%;
+    min-height:120px; /* 🔥 más alto */
+    
+    padding:12px;
+    margin-top:15px; /* 🔥 separación real */
+
+    border-radius:10px;
+    border:1px solid #1e293b;
+
+    background:#020617;
+    color:white;
+
+    font-size:13px;
+    line-height:1.5;
+
+    resize:none;
+    overflow:hidden; /* 🔥 sin scroll feo */
+}
+
+#listaServicios{
+    margin-bottom:15px; /* 🔥 separación abajo */
+}
+
+@media(max-width:768px){
+    .servicios-box{
+        grid-template-columns:1fr; /* 1 columna en móvil */
+    }
+}
+
+#listaServicios{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+
+
+.acciones-control button{
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+
+
+.acciones-control button{
+    padding:10px 16px;
+    border:none;
+    border-radius:10px;
+    background:#38bdf8;
+    color:white;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.acciones-control button:hover{
+    background:#0ea5e9;
+    transform:scale(1.05);
+}
+
+
+/* ===== MODO PDF ===== */
+
+
+.pdf-mode .ticket-pro{
+    width:100% !important;
+}
+
+#controlVista{
+    width:100%;
+}
+
+.ticket-pro{
+    width:80mm;
+    background:#fff;
+    color:#000;
+    padding:5px;
+    margin:0 auto;
+    font-size:10px;
+    line-height:1.3;
+}
+
+
+.ticket-pro *{
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+
+/* ===== PDF PROFESIONAL ===== */
+.pdf-ticket{
+    width: 280px !important;
+    margin: auto !important;
+    padding: 10px !important;
+    background: white !important;
+    color: black !important;
+    font-family: monospace !important;
+}
+
+.pdf-ticket *{
+    color:black !important;
+}
+
+.pdf-ticket img{
+    display:block;
+    margin:auto;
+    max-width:80px;
+}
+
+.pdf-ticket h2,
+.pdf-ticket h3{
+    text-align:center;
+}
+
+.pdf-ticket hr{
+    border-top:1px dashed #000;
+    margin:8px 0;
+}
+
+/* ===== PDF FIX ===== */
+#controlVista{
+    width:100%;
+}
+
+.pdf-mode {
+    width: 80mm !important;
+    font-size: 10px;
+}
+
+
+
+
+
+.ticket-pro p,
+.ticket-pro li {
+    font-size: 10px;
+    line-height: 1.3;
+}
+
+
+
+.linea {
+    border-top: 1px dashed #000;
+    margin: 5px 0;
+}
+
+
+
+.boleta-box {
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+}
+
+.ticket-pro *{
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.boleta-box{
+    background:transparent !important;
+    box-shadow:none !important;
+    padding:0 !important;
+}
+
+/* 🔥 OCULTAR BOTONES FUERA DEL MODAL */
+.modal-boleta:not(.active) .acciones-control{
+    display:none !important;
+}
+
+/* 🔥 SOLO visibles dentro del modal */
+.modal-boleta.active .acciones-control{
+    display:flex !important;
+}
+
+/* 🔥 EVITAR QUE SE VAYAN ARRIBA */
+
+
+.ticket-pro{
+    width:80mm !important;
+    background:#fff;
+    color:#000;
+    padding:5px;
+    margin:0 auto;
+    font-size:10px;
+}
+
+.ticket-pro *{
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.ticket-pro{
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+.numero-orden{
+    text-align:center;
+    font-weight:bold;
+    font-size:13px;
+    margin-top:5px;
+}
+
+#qrTicket{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-top:10px;
+}
+
+#qrTicket canvas,
+#qrTicket img{
+    display:block;
+    margin:auto;
+}
+
+
+
+.acciones-control button{
+    min-width:90px;
+}
+
+
+.acciones-control{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    margin-top:15px;
+}
+
+.acciones-control button{
+    min-width:90px;
+}
+
+.boleta-box{
+    display:flex;
+    flex-direction:column;
+    align-items:center; /* 🔥 centra TODO (ticket + botones) */
+}
+
+/* CONTENEDOR */
+.acciones-tabla{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+}
+
+/* BOTONES BASE */
+.acciones-tabla button{
+    width:35px;
+    height:35px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:0.2s;
+}
+
+/* COLORES */
+.btn-ver{
+    background:#f59e0b; /* naranja */
+    color:#fff;
+}
+
+.btn-editar{
+    background:#38bdf8; /* azul */
+    color:#fff;
+}
+
+.btn-eliminar{
+    background:#ef4444; /* rojo */
+    color:#fff;
+}
+
+/* HOVER */
+.acciones-tabla button:hover{
+    transform:scale(1.1);
+    opacity:0.9;
 }

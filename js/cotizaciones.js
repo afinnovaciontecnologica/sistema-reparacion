@@ -1,494 +1,723 @@
-// =============================
-// STORAGE
-// =============================
-let productos = JSON.parse(localStorage.getItem("productos")) || [];
-let cotizaciones = JSON.parse(localStorage.getItem("cotizaciones")) || [];
-let clientes = JSON.parse(localStorage.getItem("clientes")) || [
-{nombre:"Juan Perez", telefono:"948231352"},
-{nombre:"Maria Lopez", telefono:"912345678"},
-{nombre:"Carlos Ramos", telefono:"987654321"}
-];
-
+/* =============================
+INIT
+============================= */
+let clientes = [];
+let productos = [];
 let carrito = [];
 
-// 🔐 ROL
-const rol = localStorage.getItem("rol") || "empleado";
+/* =============================
+ELEMENTOS
+============================= */
+const cliente = document.getElementById("cliente");
+const producto = document.getElementById("producto");
+const cantidad = document.getElementById("cantidad");
 
-// =============================
-// INIT
-// =============================
-document.addEventListener("DOMContentLoaded", ()=>{
+const cNombre = document.getElementById("cNombre");
+const cTelefono = document.getElementById("cTelefono");
+const cDireccion = document.getElementById("cDireccion");
 
-    cargarProductos();
+const pNombre = document.getElementById("pNombre");
+const pPrecio = document.getElementById("pPrecio");
+const pStock = document.getElementById("pStock");
+
+const detalle = document.getElementById("detalle");
+const historial = document.getElementById("historial");
+
+const subtotalEl = document.getElementById("subtotal");
+const igvEl = document.getElementById("igv");
+const totalEl = document.getElementById("total");
+
+/* =============================
+UTILS
+============================= */
+const S = n => Number(n || 0);
+const money = n => "S/ " + S(n).toFixed(2);
+
+/* =============================
+LOAD
+============================= */
+window.addEventListener("load", () => {
+
+    clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    productos = JSON.parse(localStorage.getItem("productos")) || [];
+
+    console.log("CLIENTES:", clientes);
+    console.log("PRODUCTOS:", productos);
+
+    if (clientes.length === 0) {
+        alert("⚠ No hay clientes. Ve a la sección CLIENTES.");
+    }
+
+    if (productos.length === 0) {
+        alert("⚠ No hay productos. Ve a la sección PRODUCTOS.");
+    }
+
     cargarClientes();
-    mostrarCotizaciones();
+    cargarProductos();
+    mostrarDetalle();
+    mostrarHistorial();
 
-    document.querySelector(".btn-guardar")?.addEventListener("click", guardarCotizacion);
-    document.querySelector(".btn-limpiar")?.addEventListener("click", limpiarCotizacion);
-    document.querySelector(".btn-reset")?.addEventListener("click", reiniciarTodo);
+    if (cliente) cliente.addEventListener("change", seleccionarCliente);
+    if (producto) producto.addEventListener("change", seleccionarProducto);
 });
 
-// =============================
-// PRODUCTOS
-// =============================
-function cargarProductos(){
-let select = document.getElementById("producto");
-if(!select) return;
+/* =============================
+CLIENTES
+============================= */
+function cargarClientes() {
+    if (!cliente) return;
 
-select.innerHTML = "<option value=''>Seleccionar producto</option>";
+    cliente.innerHTML = "<option value=''>Seleccionar</option>";
 
-productos.forEach((p, i)=>{
-    select.innerHTML += `
-    <option value="${i}">
-    ${p.nombre} - S/ ${p.precio} (Stock: ${p.stock})
-    </option>`;
-});
-
-
+    clientes.forEach((c, i) => {
+        cliente.innerHTML += `<option value="${i}">${c.nombre}</option>`;
+    });
 }
 
-// =============================
-// CLIENTES
-// =============================
-function cargarClientes(){
-let select = document.getElementById("cliente");
-if(!select) return;
+function seleccionarCliente() {
+    const c = clientes[cliente.value];
+    if (!c) return limpiarCliente();
 
-
-select.innerHTML = "<option value=''>Seleccionar cliente</option>";
-
-clientes.forEach(c=>{
-    select.innerHTML += `<option value="${c.nombre}">${c.nombre}</option>`;
-});
-
-
+    cNombre.textContent = c.nombre || "-";
+    cTelefono.textContent = c.telefono || "-";
+    cDireccion.textContent = c.direccion || "-";
 }
 
-// =============================
-// AGREGAR ITEM
-// =============================
-function agregarItem(){
-
-
-let index = document.getElementById("producto").value;
-let cantidad = parseInt(document.getElementById("cantidad").value);
-
-if(index === "" || !cantidad || cantidad <= 0){
-    return alert("⚠️ Completa datos correctamente");
+function limpiarCliente() {
+    cNombre.textContent = "-";
+    cTelefono.textContent = "-";
+    cDireccion.textContent = "-";
 }
 
-let p = productos[index];
+/* =============================
+PRODUCTOS
+============================= */
+function cargarProductos() {
+    if (!producto) return;
 
-if(p.stock < cantidad){
-    return alert("⚠️ Stock insuficiente");
+    producto.innerHTML = "<option value=''>Seleccionar</option>";
+
+    productos.forEach((p, i) => {
+        producto.innerHTML += `<option value="${i}">${p.nombre} (Stock:${p.stock})</option>`;
+    });
 }
 
-carrito.push({
-    nombre: p.nombre,
-    precio: parseFloat(p.precio),
-    cantidad
-});
+function seleccionarProducto() {
+    const p = productos[producto.value];
+    if (!p) return limpiarProducto();
 
-document.getElementById("producto").value = "";
-document.getElementById("cantidad").value = 1;
-
-mostrarDetalle();
-
-
+    pNombre.textContent = p.nombre;
+    pPrecio.textContent = money(p.precio);
+    pStock.textContent = p.stock;
 }
 
-// =============================
-// DETALLE
-// =============================
-function mostrarDetalle(){
-
-
-let tabla = document.getElementById("detalle");
-if(!tabla) return;
-
-tabla.innerHTML = "";
-
-carrito.forEach((i, index)=>{
-    let subtotal = i.precio * i.cantidad;
-
-    tabla.innerHTML += `
-    <tr>
-        <td>${i.nombre}</td>
-        <td>S/ ${i.precio}</td>
-        <td>${i.cantidad}</td>
-        <td>S/ ${subtotal.toFixed(2)}</td>
-        <td><button onclick="eliminarItem(${index})">✖</button></td>
-    </tr>`;
-});
-
-calcularTotal();
-
-
+function limpiarProducto() {
+    pNombre.textContent = "-";
+    pPrecio.textContent = "-";
+    pStock.textContent = "-";
 }
 
-// =============================
-// TOTALES
-// =============================
-function calcularTotales(items){
-let total = items.reduce((sum,i)=> sum + i.precio*i.cantidad,0);
-let subtotal = total / 1.18;
-let igv = total - subtotal;
-return {subtotal, igv, total};
+/* =============================
+AGREGAR ITEM
+============================= */
+function agregarItem() {
+
+    const i = producto.value;
+    const cant = parseInt(cantidad.value);
+
+    if (i === "") return alert("Selecciona producto");
+    if (!Number.isInteger(cant) || cant <= 0) return alert("Cantidad inválida");
+
+    const p = productos[i];
+
+    if (!p) return alert("Producto inválido");
+    if (cant > p.stock) return alert("Stock insuficiente");
+
+    p.stock -= cant;
+
+    const existente = carrito.find(x => x.nombre === p.nombre);
+
+    if (existente) {
+        existente.cantidad += cant;
+    } else {
+        carrito.push({
+            nombre: p.nombre,
+            precio: S(p.precio),
+            cantidad: cant
+        });
+    }
+
+    localStorage.setItem("productos", JSON.stringify(productos));
+
+    mostrarDetalle();
+    cargarProductos();
+    limpiarProducto();
 }
 
-function calcularTotal(){
-
-    let {subtotal, igv, total} = calcularTotales(carrito);
-
-    document.getElementById("subtotal").textContent = "S/ " + subtotal.toFixed(2);
-    document.getElementById("igv").textContent = "S/ " + igv.toFixed(2);
-    document.getElementById("totalFinal").textContent = "S/ " + total.toFixed(2);
-
-    return {subtotal, igv, total};
-}
-
-// =============================
-function eliminarItem(i){
-carrito.splice(i,1);
-mostrarDetalle();
-}
-
-// =============================
-function limpiarCotizacion(){
-carrito = [];
-document.getElementById("cliente").value = "";
-mostrarDetalle();
-}
-
-// =============================
-function descontarStock(){
-carrito.forEach(item=>{
-let p = productos.find(x=>x.nombre === item.nombre);
-if(p) p.stock -= item.cantidad;
-});
-
-
-localStorage.setItem("productos", JSON.stringify(productos));
-
-
-}
-
-// =============================
-// SERIE Y NUMERO
-// =============================
-function getSerie(){
-return localStorage.getItem("serie") || "COT01";
-}
-
-function getNumero(){
-let n = parseInt(localStorage.getItem("correlativo") || "1");
-localStorage.setItem("correlativo", n + 1);
-return String(n).padStart(8,"0");
-}
-
-// =============================
-// QR
-// =============================
-function generarQR(texto){
-return `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(texto)}`;
-}
-
-// =============================
-// BOLETA COMPLETA (NO TOCADA)
-// =============================
-function verBoleta(index){
-    let cot = cotizaciones[index];
-
-let serie = "C001";
-let numero = getNumero();
-
-let {subtotal, igv, total} = calcularTotales(cot.items);
-
-let hoy = new Date();
-let fecha = hoy.toLocaleDateString() + " " + hoy.toLocaleTimeString();
-
-let html = `
-<div id="boleta">
-
-    <div class="empresa">
-        <img src="/assets/img/logo.png"> style="width:90px"><br>
-        <b>INNOVACION TECNOLOGICA</b><br>
-        RUC: 10416270258<br>
-        Dirección: Jr. Lucar y Torre #454<br>
-        Huaraz - Ancash<br>
-        Whatsapp: 948231352<br>
-        Email: afinnovaciontecnologica@gmail.com
-    </div>
-
-    <div class="linea"></div>
-
-    <div class="cabecera">
-        <span>COTIZACION</span>
-        <span>${serie}-${numero}</span>
-    </div>
-
-    <div class="info">
-        <span>Fecha: ${fecha}</span>
-        <span>Cliente: <b>${cot.cliente}</b></span>
-    </div>
-
-    <div class="linea"></div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>CANT</th>
-                <th>DESCRIPCIÓN</th>
-                <th>P.UNIT</th>
-                <th>TOTAL</th>
-            </tr>
-        </thead>
-        <tbody>
-`;
-
-cot.items.forEach(i=>{
-    let t = i.precio * i.cantidad;
-
-    html += `
-        <tr>
-            <td>${i.cantidad}</td>
-            <td>${i.nombre}</td>
-            <td>${i.precio.toFixed(2)}</td>
-            <td><b>${t.toFixed(2)}</b></td>
-        </tr>
-    `;
-});
-
-html += `
-        </tbody>
-    </table>
-
-    <div class="linea"></div>
-
-    <div class="totales">
-        <span>SUBTOTAL:</span>
-        <span>S/ ${subtotal.toFixed(2)}</span>
-
-        <span>IGV (18%):</span>
-        <span>S/ ${igv.toFixed(2)}</span>
-    </div>
-
-    <div class="total-final">
-        TOTAL: S/ ${total.toFixed(2)}
-    </div>
-
-    <div class="pago">
-        Método de pago: EFECTIVO - YAPE - PLIN
-    </div>
-
-    <div class="linea"></div>
-
-    <div class="gracias">
-        <b>¡GRACIAS POR SU COMPRA!</b><br>
-        Representación impresa de la boleta electrónica
-    </div>
-
-    <div class="acciones">
-        <button onclick='descargarPDF(${JSON.stringify(cot)})'>📄 PDF</button>
-        <button onclick='enviarWhatsApp(${JSON.stringify(cot)})'>📲 WhatsApp</button>
-        <button onclick="window.print()">🖨 Imprimir</button>
-        <button onclick="cerrarModal()">❌ Cerrar</button>
-    </div>
-
-</div>
-`;
-
-document.getElementById("modalBody").innerHTML = html;
-document.getElementById("modalPDF").style.display = "flex";
-}
-
-// =============================
-// PDF + WHATSAPP
-// =============================
-function enviarPDFyWhatsApp(cot){
-descargarPDF(cot);
-setTimeout(()=> enviarWhatsApp(cot),800);
-}
-
-function descargarPDF(cot){
-const { jsPDF } = window.jspdf;
-let doc = new jsPDF();
-
-
-let {total} = calcularTotales(cot.items);
-
-doc.text("COTIZACION",10,10);
-doc.text("Cliente: "+cot.cliente,10,20);
-doc.text("Total: "+total.toFixed(2),10,30);
-
-doc.save("cotizacion.pdf");
-
-
-}
-
-// =============================
-// WHATSAPP
-// =============================
-function enviarWhatsApp(cot){
-
-
-let c = clientes.find(x=>x.nombre===cot.cliente);
-if(!c) return alert("Cliente sin número");
-
-let numero = "51"+c.telefono;
-
-let {total} = calcularTotales(cot.items);
-
-let msg = `🧾 COTIZACIÓN
-
-
-Cliente: ${cot.cliente}
-Total: S/ ${total.toFixed(2)}
-
-Adjunta el PDF descargado`;
-
-
-window.open(`https://wa.me/${numero}?text=${encodeURIComponent(msg)}`);
-
-
-}
-
-// =============================
-// GUARDAR
-// =============================
-function guardarCotizacion(){
-
-
-let cliente = document.getElementById("cliente").value;
-
-if(!cliente || carrito.length===0){
-    return alert("Faltan datos");
-}
-
-let {subtotal, igv, total} = calcularTotales(carrito);
-
-let cot = {
-    cliente,
-    items:[...carrito],
-    subtotal,
-    igv,
-    total,
-    fecha:new Date().toLocaleDateString()
-};
-
-cotizaciones.push(cot);
-localStorage.setItem("cotizaciones", JSON.stringify(cotizaciones));
-
-descontarStock();
-limpiarCotizacion();
-mostrarCotizaciones();
-verBoleta(cot);
-
-
-}
-
-// =============================
-// HISTORIAL (CON ROLES)
-// =============================
-function mostrarCotizaciones(){
-
-
-let tabla = document.getElementById("listaCotizaciones");
-if(!tabla) return;
-
-tabla.innerHTML = "";
-
-cotizaciones.forEach((c,i)=>{
-    tabla.innerHTML += `
-    <tr>
-        <td>${c.cliente}</td>
-        <td>${c.fecha}</td>
-        <td>S/ ${c.total.toFixed(2)}</td>
-        <td>
-            <button onclick="verBoleta(${i})">👁</button>
-
-            ${rol === "admin" ? `
-                <button onclick="editarCotizacion(${i})">✏️</button>
-                <button onclick="eliminarCotizacion(${i})">🗑</button>
-            ` : `
-                <span style="color:#94a3b8;">Sin permisos</span>
-            `}
-        </td>
-    </tr>`;
-});
-
-
-}
-
-// =============================
-function editarCotizacion(i){
-
-
-if(rol !== "admin") return alert("No tienes permiso");
-
-let c = cotizaciones[i];
-
-document.getElementById("cliente").value = c.cliente;
-carrito = [...c.items];
-
-cotizaciones.splice(i,1);
-localStorage.setItem("cotizaciones", JSON.stringify(cotizaciones));
-
-mostrarDetalle();
-mostrarCotizaciones();
-
-
-}
-
-// =============================
-function eliminarCotizacion(i){
-
-
-if(rol !== "admin") return alert("No tienes permiso");
-
-if(confirm("Eliminar?")){
-    cotizaciones.splice(i,1);
-    localStorage.setItem("cotizaciones", JSON.stringify(cotizaciones));
-    mostrarCotizaciones();
-}
-
-
-}
-
-// =============================
-function cerrarModal(){
-document.getElementById("modalPDF").style.display = "none";
-}
-
-function reiniciarTodo(){
-
-    if(!confirm("⚠️ Esto borrará TODO (carrito, cotizaciones y numeración). ¿Continuar?")){
+/* =============================
+DETALLE
+============================= */
+function mostrarDetalle() {
+
+    if (!detalle) return;
+
+    if (carrito.length === 0) {
+        detalle.innerHTML = `<tr><td colspan="5">Sin productos</td></tr>`;
+        calcular();
         return;
     }
 
-    // Vaciar carrito
+    detalle.innerHTML = "";
+
+    carrito.forEach((item, i) => {
+        const totalItem = S(item.precio) * S(item.cantidad);
+
+        detalle.innerHTML += `
+        <tr>
+            <td>${item.nombre}</td>
+            <td>${money(item.precio)}</td>
+            <td>${item.cantidad}</td>
+            <td>${money(totalItem)}</td>
+            <td>
+                <button onclick="sumarItem(${i})">➕</button>
+                <button onclick="restarItem(${i})">➖</button>
+                <button onclick="eliminarItem(${i})">❌</button>
+            </td>
+        </tr>`;
+    });
+
+    calcular();
+}
+
+/* =============================
+EDITAR ITEMS
+============================= */
+function sumarItem(i) {
+    const item = carrito[i];
+    const p = productos.find(x => x.nombre === item.nombre);
+
+    if (p && p.stock > 0) {
+        item.cantidad++;
+        p.stock--;
+        sync();
+    } else {
+        alert("Sin stock");
+    }
+}
+
+function restarItem(i) {
+    const item = carrito[i];
+    const p = productos.find(x => x.nombre === item.nombre);
+
+    item.cantidad--;
+
+    if (p) p.stock++;
+
+    if (item.cantidad <= 0) carrito.splice(i, 1);
+
+    sync();
+}
+
+function eliminarItem(i) {
+    const item = carrito[i];
+    const p = productos.find(x => x.nombre === item.nombre);
+
+    if (p) p.stock += item.cantidad;
+
+    carrito.splice(i, 1);
+
+    sync();
+}
+
+function sync() {
+    localStorage.setItem("productos", JSON.stringify(productos));
+    mostrarDetalle();
+    cargarProductos();
+}
+
+/* =============================
+TOTALES
+============================= */
+function calcular() {
+    const total = carrito.reduce((s, i) => s + S(i.precio) * S(i.cantidad), 0);
+    const subtotal = total / 1.18;
+    const igv = total - subtotal;
+
+    subtotalEl.textContent = money(subtotal);
+    igvEl.textContent = money(igv);
+    totalEl.textContent = money(total);
+}
+
+/* =============================
+GUARDAR
+============================= */
+
+
+/* =============================
+HISTORIAL
+============================= */
+function mostrarHistorial() {
+
+    if (!historial) return;
+
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+
+    historial.innerHTML = "";
+
+    data.forEach((c, i) => {
+        historial.innerHTML += `
+        <tr>
+            <td>${c.cliente}</td>
+            <td>${c.fecha}</td>
+            <td>${c.total}</td>
+            <td>
+                <button onclick="verCotizacion(${i})">👁</button>
+                <button onclick="eliminarCotizacion(${i})">🗑</button>
+            </td>
+        </tr>`;
+    });
+}
+
+/* =============================
+VER
+============================= */
+function verCotizacion(i) {
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+    const c = data[i];
+    if (!c) return;
+
+    alert(`${c.numero}\n${c.cliente}\nTotal: ${c.total}`);
+}
+
+/* =============================
+ELIMINAR
+============================= */
+function eliminarCotizacion(i) {
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+    data.splice(i, 1);
+    localStorage.setItem("cotizaciones", JSON.stringify(data));
+    mostrarHistorial();
+}
+
+function limpiarTodo(){
+
     carrito = [];
 
-    // Limpiar selects
-    document.getElementById("cliente").value = "";
-    document.getElementById("producto").value = "";
-    document.getElementById("cantidad").value = 1;
+    // reset selects
+    cliente.value = "";
+    producto.value = "";
+    cantidad.value = 1;
 
-    // Limpiar tablas
-    document.getElementById("detalle").innerHTML = "";
-    document.getElementById("listaCotizaciones").innerHTML = "";
+    // limpiar UI cliente
+    cNombre.textContent = "-";
+    cTelefono.textContent = "-";
+    cDireccion.textContent = "-";
 
-    // Reset totales
-    document.getElementById("subtotal").textContent = "S/ 0.00";
-    document.getElementById("igv").textContent = "S/ 0.00";
-    document.getElementById("totalFinal").textContent = "S/ 0.00";
+    // limpiar UI producto
+    pNombre.textContent = "-";
+    pPrecio.textContent = "-";
+    pStock.textContent = "-";
 
-    // Borrar historial de cotizaciones
-    cotizaciones = [];
-    localStorage.removeItem("cotizaciones");
+    mostrarDetalle();
+    calcular();
+}
 
-    // Reiniciar numeración
-    localStorage.removeItem("correlativo");
+function guardarCotizacion(){
 
-    alert("✅ Sistema reiniciado correctamente");
+    if(cliente.value === "") return alert("Selecciona cliente");
+    if(carrito.length === 0) return alert("Sin productos");
+
+    const c = clientes[cliente.value];
+
+    let contador = parseInt(localStorage.getItem("contadorCot") || "1");
+
+   const cot = {
+    numero: "COT-" + String(contador).padStart(4,"0"),
+    cliente: c.nombre,
+    telefono: c.telefono,
+    direccion: c.direccion,
+    items: carrito.map(x=>({...x})),
+    total: totalEl.textContent,
+    fecha: new Date().toLocaleString(),
+    usuario: localStorage.getItem("user") // 🔥 AQUÍ
+};
+
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+    data.push(cot);
+
+    localStorage.setItem("cotizaciones", JSON.stringify(data));
+    localStorage.setItem("contadorCot", contador + 1);
+
+    alert("✔ Cotización guardada");
+
+    // 🔥 LIMPIAR TODO
+    limpiarTodo();
+
+    mostrarHistorial();
+}
+
+function mostrarHistorial(){
+
+    const rol = localStorage.getItem("rol");
+    const user = localStorage.getItem("user");
+
+let data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+
+
+
+    historial.innerHTML = "";
+
+    data.forEach((c,i)=>{
+        historial.innerHTML += `
+        <tr>
+            <td>${c.cliente}</td>
+            <td>${c.fecha}</td>
+            <td>${c.total}</td>
+            <td>
+                <button onclick="verPDF(${i})">📄</button>
+                <button onclick="enviarWhatsApp(${i})">📲</button>
+                ${rol === "admin" ? `
+                <button onclick="editarCotizacion(${i})">✏️</button>
+                <button onclick="eliminarCotizacion(${i})">🗑</button>
+                ` : ``}
+            </td>
+        </tr>`;
+    });
+}
+
+function verPDF(i){
+
+const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+const c = data[i];
+if(!c) return;
+
+const total = parseFloat(c.total.replace("S/","")) || 0;
+const subtotal = total / 1.18;
+const igv = total - subtotal;
+
+const filas = c.items.map(p=>`
+<tr>
+<td>${p.cantidad}</td>
+<td>${p.nombre}</td>
+<td>S/ ${p.precio.toFixed(2)}</td>
+<td>S/ ${(p.precio*p.cantidad).toFixed(2)}</td>
+</tr>
+`).join("");
+
+const win = window.open("", "_blank");
+
+win.document.write(`
+<html>
+<head>
+<title>${c.numero}</title>
+
+<style>
+
+/* ===== BASE ===== */
+*{box-sizing:border-box;font-family:'Segoe UI';margin:0}
+body{background:#eef2f7}
+
+/* ===== HOJA ===== */
+.page{
+width:210mm;
+min-height:297mm;
+margin:auto;
+background:#fff;
+padding:30px;
+
+display:flex;
+flex-direction:column;
+}
+
+/* ===== CONTENIDO ===== */
+.content{flex:1}
+
+/* ===== HEADER ===== */
+.header{
+text-align:center;
+}
+
+.logo{
+height:90px;
+margin-bottom:10px;
+}
+
+.title{
+font-size:22px;
+font-weight:bold;
+color:#1e3a5f;
+}
+
+.tag{
+color:#2563eb;
+font-size:14px;
+}
+
+.line{
+border-top:3px solid #1e3a5f;
+margin:15px 0;
+}
+
+/* ===== TOP ===== */
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.badge{
+background:#1e3a5f;
+color:#fff;
+padding:8px 16px;
+border-radius:8px;
+font-weight:bold;
+}
+
+/* ===== CLIENTE ===== */
+.cliente{
+display:flex;
+justify-content:space-between;
+background:#f1f5f9;
+padding:14px;
+border-radius:10px;
+margin-top:10px;
+font-size:14px;
+}
+
+/* ===== TABLA ===== */
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:15px;
+}
+
+th{
+background:#1e3a5f;
+color:white;
+padding:10px;
+font-size:13px;
+}
+
+td{
+border:1px solid #ddd;
+padding:10px;
+text-align:center;
+}
+
+/* ===== TOTAL ===== */
+.total-box{
+margin-top:15px;
+width:260px;
+margin-left:auto;
+border:1px solid #ccc;
+padding:12px;
+border-radius:10px;
+background:#f9fafb;
+}
+
+.total{
+font-size:20px;
+color:#16a34a;
+font-weight:bold;
+}
+
+/* ===== CONDICIONES ===== */
+.cond{
+margin-top:25px;
+font-size:13px;
+}
+
+/* ===== FOOTER ===== */
+.footer{
+border-top:1px solid #ccc;
+margin-top:20px;
+padding-top:15px;
+}
+
+/* PAGOS */
+.pagos{
+text-align:center;
+margin-bottom:10px;
+}
+
+.pagos img{
+height:25px;
+margin:0 6px;
+}
+
+/* SERVICIOS */
+.servicios{
+display:flex;
+justify-content:space-between;
+text-align:center;
+font-size:12px;
+margin:10px 0;
+}
+
+/* FIRMA */
+.firma{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:10px;
+}
+
+.firma img{
+height:60px;
+}
+
+.sello{
+border:3px double #1e3a5f;
+border-radius:50%;
+padding:15px;
+font-size:12px;
+text-align:center;
+}
+
+/* PRINT */
+@media print{
+body{background:white}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="page">
+
+<div class="content">
+
+<div class="header">
+<img src="../assets/img/logo.png" class="logo">
+<div class="title">AF INNOVACION TECNOLOGICA</div>
+<div class="tag">Soluciones Tecnológicas a tu Alcance</div>
+RUC: 10416270258<br>
+Jr. Lucar y Torre #454<br>
+Huaraz - Ancash<br>
+WhatsApp: 9482321352
+</div>
+
+<div class="line"></div>
+
+<div class="top">
+<h2>COTIZACIÓN</h2>
+<div class="badge">${c.numero}</div>
+</div>
+
+<p>📅 ${c.fecha}</p>
+
+<div class="cliente">
+<div>👤 ${c.cliente}</div>
+<div>📞 ${c.telefono}</div>
+<div>📍 ${c.direccion}</div>
+</div>
+
+<table>
+<tr>
+<th>CANT</th>
+<th>DESCRIPCIÓN</th>
+<th>P.UNIT</th>
+<th>TOTAL</th>
+</tr>
+
+${filas}
+
+</table>
+
+<div class="total-box">
+Subtotal: S/ ${subtotal.toFixed(2)}<br>
+IGV (18%): S/ ${igv.toFixed(2)}<br>
+<div class="total">TOTAL: S/ ${total.toFixed(2)}</div>
+</div>
+
+<div class="cond">
+<b>CONDICIONES COMERCIALES</b><br>
+• Precios incluyen IGV<br>
+• Validez: 7 días<br>
+• Tiempo de entrega: A coordinar<br>
+
+</div>
+
+</div>
+
+<div class="footer" style="margin-top:20px; padding:0; border:none;">
+
+<img src="../assets/img/pie_pagina.png" style="
+width:100%;
+height:auto;
+display:block;
+">
+
+</div>
+
+</div>
+
+<script>
+window.onload=()=>window.print();
+</script>
+
+</body>
+</html>
+`);
+}
+
+function enviarWhatsApp(i){
+
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+    const c = data[i];
+
+    const numero = c.telefono.replace(/\D/g,"");
+
+    let texto = `🧾 *${c.numero}*\n\n`;
+    texto += `👤 ${c.cliente}\n📞 ${c.telefono}\n\n`;
+
+    c.items.forEach(p=>{
+        texto += `▫ ${p.nombre} x${p.cantidad} = S/ ${(p.precio*p.cantidad).toFixed(2)}\n`;
+    });
+
+    texto += `\n💰 TOTAL: ${c.total}`;
+
+    window.open(`https://wa.me/51${numero}?text=${encodeURIComponent(texto)}`);
+}
+
+function editarCotizacion(i){
+
+    if(localStorage.getItem("rol") !== "admin"){
+    return alert("No tienes permisos");
+}
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+    const c = data[i];
+
+    // cargar cliente
+    const idx = clientes.findIndex(x => x.nombre === c.cliente);
+
+    if(idx !== -1){
+        cliente.value = idx;
+        seleccionarCliente();
+    }
+
+    // cargar carrito
+    carrito = c.items.map(x=>({...x}));
+
+    // eliminar original
+    data.splice(i,1);
+    localStorage.setItem("cotizaciones", JSON.stringify(data));
+
+    mostrarDetalle();
+    mostrarHistorial();
+
+    window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function eliminarCotizacion(i){
+
+    if(localStorage.getItem("rol") !== "admin"){
+        return alert("No tienes permisos");
+    }
+
+    const data = JSON.parse(localStorage.getItem("cotizaciones")) || [];
+    data.splice(i,1);
+    localStorage.setItem("cotizaciones", JSON.stringify(data));
+    mostrarHistorial();
 }

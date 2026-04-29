@@ -16,7 +16,9 @@ const serviciosPorTipo = {
         "Instalación de programas (Office, Utilitarios, etc.)",
         "Instalación de programas (Ingenieria)",
         "Instalación de programas (Diseño)",
-        "Instalacion de Antivirus (Nod32, MCAFEE, Kasperky)",
+        "Instalacion de Antivirus (Nod32)",
+        "Instalacion de Antivirus (Kasperky)",
+        "Instalacion de Antivirus (McAfee)",
         "Eliminación de virus / malware",
         "Optimización de rendimiento",
         "Armado de PC (ensamblaje)",
@@ -38,8 +40,10 @@ const serviciosPorTipo = {
         "Instalación de programas (Office, Utilitarios, etc.)",
         "Instalación de programas (Ingenieria)",
         "Instalación de programas (Diseño)",
-        "Instalacion de Antivirus (Nod32, MCAFEE, Kasperky)",
-        "Eliminación de virus",
+        "Instalacion de Antivirus (Nod32)",
+        "Instalacion de Antivirus (Kasperky)",
+        "Instalacion de Antivirus (McAfee)",
+        "Eliminación de virus / malware",
         "Optimización del sistema (lento)",
         "Cambio de disco duro / SSD /M.2 (SATA o NVMe/PCIe)",
         "Ampliación de memoria RAM (DDR3,DDR4,DDR5)",
@@ -236,7 +240,8 @@ function obtenerServicios(){
 }
 
 function actualizarResumen(){
-    document.getElementById("solucion").value = obtenerServicios().join(", ")
+    document.getElementById("solucion").value =
+    obtenerServicios().map(s => "• " + s).join("\n")
 }
 
 function seleccionarTodo(){
@@ -267,13 +272,7 @@ function cargarMarcas(tipo){
     })
 }
 
-// ======================
-// ACCESORIOS
-// ======================
-function obtenerAccesorios(){
-    return [...document.querySelectorAll(".accesorios input:checked")]
-        .map(a => a.value)
-}
+
 
 // ======================
 // GUARDAR
@@ -298,6 +297,7 @@ function guardarReparacion(){
     modelo: document.getElementById("modelo").value,
     estetica: document.getElementById("estetica").value,
     accesorios: obtenerAccesorios(),
+    
     servicios: obtenerServicios(),
     solucion: document.getElementById("solucion").value,
     estado: document.getElementById("estado").value,
@@ -306,14 +306,23 @@ function guardarReparacion(){
     salida: document.getElementById("estado").value === "Terminado" ? hoy() : "",
 
     tecnico: document.getElementById("tecnico")?.value || "No asignado",
-    garantia: document.getElementById("garantia")?.value || "Sin garantía"
+    garantia: document.getElementById("garantia")?.value || ""
 }
 
 
-    
-        reparaciones.push(obj)
-        localStorage.setItem("reparaciones", JSON.stringify(reparaciones))
+    // ✅ VALIDAR ANTES DE GUARDAR
+if(obj.estado === "Terminado" && obj.costo === 0){
+    alert("⚠️ Debes ingresar el costo del servicio")
+    return
+}
 
+// ✅ RECIÉN GUARDAR
+if(editIndex !== null){
+    reparaciones[editIndex] = obj
+    editIndex = null
+}else{
+    reparaciones.push(obj)
+}
 // ✅ AQUÍ SÍ VA
     mostrarControl(obj)
 
@@ -321,6 +330,7 @@ function guardarReparacion(){
     mostrar()
     actualizarContadores()
 }
+
 
 // ======================
 // MOSTRAR
@@ -358,9 +368,19 @@ function mostrar(){
         <td>${(r.servicios || []).join(", ")}</td>
 
         <td>
+         ${
+        r.costo === 0 
+        ? `<input type="number" placeholder="Costo"
+            onchange="actualizarCosto(${index}, this.value)">`
+        : `S/. ${r.costo}`
+        }
+        </td>
+        <td>
             <select onchange="cambiarEstado(${index})">
                 <option ${r.estado=="Pendiente"?"selected":""}>Pendiente</option>
-                <option ${r.estado=="En proceso"?"selected":""}>En proceso</option>
+                <option value="En proceso" ${r.estado=="En proceso"?"selected":""}>
+                Diagnóstico en curso
+                </option>
                 <option ${r.estado=="Terminado"?"selected":""}>Terminado</option>
             </select>
         </td>
@@ -370,11 +390,12 @@ function mostrar(){
         <td>${dias(r.ingreso, r.salida)}</td>
 
         <td>
-            <button class="btn-control ${getEstadoClase(r.estado)}"
-                onclick="verControl(${index})">
-            📄 Control
-            </button>
-        </td>
+    <button class="btn-control ${getEstadoClase(r.estado)}"
+    onclick="verControl(${index})">📄</button><button 
+    
+    onclick="editarRegistro(${index})">✏️</button><button onclick="eliminarRegistro(${index})">🗑️</button>
+        
+    </td>
 
         </tr>`
     })
@@ -407,8 +428,8 @@ function limpiar(){
     document.getElementById("marca").innerHTML = '<option value="">Seleccione marca</option>'
 
     // 🔹 CHECKBOX
-    document.querySelectorAll(".accesorios input")
-    .forEach(c=>c.checked=false)
+   document.querySelectorAll(".accesorios-box input")
+.forEach(c=>c.checked=false)
 
     // 🔹 SERVICIOS
     document.getElementById("listaServicios").innerHTML = "<p>Seleccione tipo de equipo</p>"
@@ -453,12 +474,33 @@ document.addEventListener("DOMContentLoaded", ()=>{
         mostrarDatosCliente(e.target.value)
         document.getElementById("buscarCliente").value = ""
     })
+document.getElementById("tipoEquipo")
+.addEventListener("change", e=>{
 
-    document.getElementById("tipoEquipo")
-    .addEventListener("change", e=>{
-        cargarMarcas(e.target.value)
-        cargarServicios(e.target.value)
-    })
+    const tipo = e.target.value
+
+    console.log("TIPO SELECCIONADO:", tipo)
+
+    if(!tipo) return
+
+    try{
+
+        limpiarDiagnostico()
+
+        cargarMarcas(tipo)
+        cargarServicios(tipo)
+
+        const bloqueTintas = document.getElementById("bloqueTintas")
+
+        if(bloqueTintas){
+            bloqueTintas.style.display = (tipo === "Impresora") ? "grid" : "none"
+        }
+
+    }catch(error){
+        console.error("ERROR EN CAMBIO DE EQUIPO:", error)
+    }
+
+})
 
     document.getElementById("buscarOrden")
     .addEventListener("input", e=>{
@@ -466,6 +508,24 @@ document.addEventListener("DOMContentLoaded", ()=>{
         mostrar()
     })
 
+    // 🔥 AUTO CRECER SOLUCIÓN
+    const textarea = document.getElementById("solucion");
+
+    // 🔥 CONTROLAR COSTO SEGÚN ESTADO
+const estadoSelect = document.getElementById("estado")
+
+if(estadoSelect){
+    estadoSelect.addEventListener("change", controlarCosto)
+    controlarCosto()
+}
+
+// inicial
+if(textarea){
+    textarea.addEventListener("input", () => {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+    });
+}
     // 🔥 ESTO FALTABA
     mostrar()
 
@@ -476,19 +536,49 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 function descargarControlPDF(){
 
-    if(!window.controlActual){
-        alert("No hay control generado")
+    const elemento = document.querySelector(".ticket-pro")
+    const modal = document.getElementById("modalControl")
+
+    if(!elemento){
+        alert("No se encontró el ticket")
         return
     }
 
-    let html = generarControlHTML(window.controlActual)
+    // 🔥 PASO CLAVE: forzar visible REAL
+    modal.style.display = "block"
+    modal.style.position = "static"
 
-    let contenedor = document.createElement("div")
-    contenedor.innerHTML = html
+    // 🔥 esperar render (CLAVE)
+    setTimeout(()=>{
 
-    html2pdf().from(contenedor).save("Control-Atencion.pdf")
+        const alturaPx = elemento.scrollHeight
+        const alturaMm = Math.max(alturaPx * 0.2645, 200)
+
+        html2pdf()
+        .set({
+            margin: 0,
+            filename: 'ticket-servicio.pdf',
+            image: { type: 'jpeg', quality: 1 },
+            html2canvas: {
+                scale: 4,
+                useCORS: true,
+                scrollY: 0
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: [80, alturaMm]
+            }
+        })
+        .from(elemento)
+        .save()
+        .then(()=>{
+            // 🔥 restaurar estado
+            modal.style.position = "fixed"
+            modal.style.display = ""
+        })
+
+    }, 300) // 🔥 tiempo clave
 }
-
 
 
 
@@ -499,62 +589,41 @@ function descargarControlPDF(){
 
 function enviarControlWhatsApp(){
 
-    if(!window.controlActual){
-        alert("No hay control generado")
-        return
+    const r = window.controlActual; // 🔥 USAR EL CONTROL ACTUAL
+
+    if(!r) {
+        alert("No hay datos para enviar");
+        return;
     }
 
-    let r = window.controlActual
+    let [nombre, telefono] = r.cliente.split("|");
 
-    // 📄 GENERAR PDF AUTOMÁTICO
-    let html = generarControlHTML(r)
-    let contenedor = document.createElement("div")
-    contenedor.innerHTML = html
-
-    html2pdf().from(contenedor).save(`Control-${r.orden}.pdf`)
-
-    // 📱 PREPARAR WHATSAPP
-    let numero = r.cliente.split("|")[1] || ""
-
-    if(!numero){
-        alert("Cliente sin teléfono")
-        return
+    if(!telefono){
+        alert("Cliente sin teléfono");
+        return;
     }
 
-    numero = numero.replace(/\D/g, "")
-    if(!numero.startsWith("51")) numero = "51" + numero
+    // limpiar número
+    telefono = telefono.replace(/\D/g, "");
 
-    let estadoMsg = r.estado === "Terminado"
-? "✅ Tu equipo ya está listo para ser recogido."
-: "⏳ Tu equipo está en proceso."
+    let texto = `🧾 *CONTROL DE ATENCIÓN*\n\n`;
 
-let mensaje = 
-`🛠 *AF INNOVACION TECNOLOGICA*
+    texto += `👤 Cliente: ${nombre}\n`;
+    texto += `📱 Teléfono: ${telefono}\n\n`;
 
-Hola ${r.cliente.split("|")[0]} 👋
+    texto += `💻 Equipo: ${r.tipo}\n`;
+    texto += `Marca: ${r.marca}\n`;
+    texto += `Modelo: ${r.modelo}\n\n`;
 
-${estadoMsg}
+    texto += `🛠 Diagnóstico:\n`;
+    texto += (r.servicios || []).map(s => "• " + s).join("\n");
 
-📦 *Detalle del servicio:*
-💻 Equipo: ${r.tipo} ${r.marca} ${r.modelo}
+    texto += `\n\n💰 Total: S/. ${r.costo}`;
+    texto += `\n📌 Estado: ${r.estado}`;
 
-🧰 *Servicios realizados:*
-${r.servicios.map(s => "✔ " + s).join("\n")}
+    const url = `https://wa.me/51${telefono}?text=${encodeURIComponent(texto)}`;
 
-💰 *Total:* S/. ${r.costo}
-📅 *Ingreso:* ${r.ingreso}
-📄 *Orden:* ${r.orden}
-
-📎 Te adjunto tu control de atención en PDF.
-
-🙏 Gracias por tu preferencia.`
-
-    let url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`
-
-    // ⏱ Espera leve para que descargue primero
-    setTimeout(()=>{
-        window.open(url, "_blank")
-    }, 800)
+    window.open(url, "_blank");
 }
 
 function cerrarControl(){
@@ -570,6 +639,34 @@ function mostrarControl(r){
     document.getElementById("controlVista").innerHTML = html
     document.getElementById("modalControl").classList.add("active")
 
+    // 🔥 GENERAR QR
+setTimeout(()=>{
+
+    const qrContainer = document.getElementById("qrTicket")
+
+    if(qrContainer){
+
+        qrContainer.innerHTML = ""
+
+        let [nombre, telefono] = r.cliente.split("|")
+
+        const textoQR = `
+Orden: ${r.orden}
+Cliente: ${nombre}
+Tel: ${telefono}
+Equipo: ${r.tipo}
+Estado: ${r.estado}
+Total: S/. ${r.costo}
+        `
+
+        new QRCode(qrContainer, {
+            text: textoQR,
+            width: 80,
+            height: 80
+        })
+    }
+
+}, 200)
     window.controlActual = r
 }
 
@@ -592,8 +689,8 @@ function generarControlHTML(r){
         <div class="linea"></div>
 
         <div class="titulo">
-            <h3>CONTROL DE ATENCIÓN</h3>
-            <p>${r.orden || "-"}</p>
+    <h3>CONTROL DE ATENCIÓN</h3>
+    <p><strong>N° Orden:</strong> ${r.orden || "-"}</p>
             <p>Ingreso: ${r.ingreso}</p>
             <p>Salida: ${r.salida || "-"}</p>
             <p>Días: ${dias(r.ingreso, r.salida)}</p>
@@ -631,31 +728,54 @@ function generarControlHTML(r){
         
 
         <div class="linea"></div>
+${r.estado === "Terminado" ? `
 
-         <div class="bloque">
-            <strong>SERVICIOS REALIZADOS</strong>
-            <ul>
-                ${r.servicios.map(s=>`<li>✔ ${s}</li>`).join("")}
-            </ul>
-        </div>
+<div class="linea"></div>
+
+<div class="bloque">
+    <strong>SERVICIOS REALIZADOS</strong>
+    <ul>
+        ${(r.servicios || []).map(s=>`<li>✔ ${s}</li>`).join("")}
+    </ul>
+</div>
+
+` : `
+
+<div class="linea"></div>
+
+<div class="bloque">
+    <strong>DIAGNÓSTICO EN CURSO</strong>
+    <p>El equipo se encuentra en revisión técnica.</p>
+</div>
+
+`}
 
         <div class="linea"></div>
 
         <div class="bloque">
             <p><strong>Técnico:</strong> ${r.tecnico || "No asignado"}</p>
-            <p><strong>Garantía:</strong> ${r.garantia || "Sin garantía"}</p>
+           ${r.garantia ? `<p><strong>Garantía:</strong> ${r.garantia}</p>` : ""}
         </div>
 
         <div class="linea"></div>
 
         <div class="totales">
-            <p>SUBTOTAL: S/. ${r.costo}</p>
-            <div class="total">TOTAL: S/. ${r.costo}</div>
+           
+            <div class=  "total"> 💰 TOTAL: S/. ${r.costo}</div>
         </div>
 
-        <div class="estado">${r.estado}</div>
+        <div class="estado">
+        ${r.estado === "Pendiente" ? "⏳ Recepción registrada" :
+             r.estado === "En proceso" ? "🔧 Diagnóstico en revisión" :
+             r.estado === "Terminado" ? "✅ Servicio finalizado" :
+              r.estado}
+        </div>
 
         <div class="linea"></div>
+
+        <div class="linea"></div>
+
+        <div id="qrTicket" style="text-align:center;"></div>
 
         <p class="gracias">¡Gracias por confiar en nosotros!</p>
 
@@ -683,7 +803,7 @@ function resetFormulario(){
     document.getElementById("garantia").value = ""
 
     // 🔴 ACCESORIOS
-    document.querySelectorAll(".accesorios input")
+    document.querySelectorAll(".accesorios-box input")
     .forEach(c => c.checked = false)
 
     // 🔴 SERVICIOS (CHECKBOX + CONTENEDOR)
@@ -838,4 +958,112 @@ function resetearCorrelativo(){
     localStorage.removeItem("correlativoOrden")
 
     alert("✅ Numeración reiniciada")
+}
+
+function limpiarDiagnostico(){
+
+    const checks = document.querySelectorAll("#listaServicios input[type='checkbox']")
+
+    if(checks.length){
+        checks.forEach(c => c.checked = false)
+    }
+
+    const txt = document.getElementById("solucion")
+
+    if(txt){
+        txt.value = ""
+        txt.style.height = "auto"
+    }
+}
+
+function obtenerAccesorios(){
+    return [...document.querySelectorAll(".accesorios-box input:checked")]
+        .map(c => c.value)
+}
+
+function controlarCosto(){
+
+    const estado = document.getElementById("estado").value
+    const inputCosto = document.getElementById("costo")
+
+    if(estado === "Terminado"){
+        inputCosto.disabled = false
+        inputCosto.placeholder = "Ingrese total del servicio"
+    }else{
+        inputCosto.disabled = true
+        inputCosto.value = ""
+        inputCosto.placeholder = "Disponible al finalizar"
+    }
+}
+
+function actualizarCosto(index, valor){
+
+    let r = reparaciones[index]
+
+    if(!valor || Number(valor) <= 0){
+        alert("Ingrese un costo válido")
+        return
+    }
+
+    r.costo = Number(valor)
+
+    if(r.estado === "Terminado" && !r.salida){
+        r.salida = hoy()
+    }
+
+    localStorage.setItem("reparaciones", JSON.stringify(reparaciones))
+
+    mostrar()
+}
+
+function editarRegistro(index){
+
+    let r = reparaciones[index]
+    editIndex = index
+
+    let [nombre, telefono, correo] = r.cliente.split("|")
+
+    // 🔹 buscar cliente
+    let i = clientes.findIndex(c => c.nombre === nombre)
+
+    document.getElementById("cliente").value = i
+    mostrarDatosCliente(i)
+
+    document.getElementById("tipoEquipo").value = r.tipo
+    cargarMarcas(r.tipo)
+    cargarServicios(r.tipo)
+
+    setTimeout(()=>{
+        document.getElementById("marca").value = r.marca
+    },100)
+
+    document.getElementById("modelo").value = r.modelo
+    document.getElementById("estetica").value = r.estetica
+    document.getElementById("solucion").value = r.solucion
+    document.getElementById("estado").value = r.estado
+    document.getElementById("costo").value = r.costo
+
+    controlarCosto()
+}
+
+function eliminarRegistro(index){
+
+    let ok = confirm("¿Eliminar este registro?")
+    if(!ok) return
+
+    reparaciones.splice(index,1)
+    localStorage.setItem("reparaciones", JSON.stringify(reparaciones))
+
+    mostrar()
+    actualizarContadores()
+}
+
+function resetearOrden(){
+
+    let ok = confirm("⚠️ Se reiniciará el contador de órdenes\n¿Continuar?")
+    if(!ok) return
+
+    localStorage.removeItem("correlativoOrden")
+
+    alert("✅ Contador reiniciado")
 }

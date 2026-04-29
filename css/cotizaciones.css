@@ -1,408 +1,391 @@
-/* ===== RESET ===== */
+/* ======================================================
+RESET
+====================================================== */
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Segoe UI', Arial, sans-serif;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter','Segoe UI',sans-serif;
 }
 
-/* ===== VARIABLES ===== */
-:root{
-    --bg-main:#020617;
-    --bg-card:#0f172a;
-    --border:#1e293b;
-    --primary:#0ea5e9;
-    --primary-hover:#0284c7;
-    --accent:#38bdf8;
-    --text-main:#e2e8f0;
-    --text-soft:#94a3b8;
-    --success:#22c55e;
-    --success-hover:#16a34a;
-    --danger:#ef4444;
-    --danger-hover:#dc2626;
-    --warning:#f59e0b;
-    --warning-hover:#d97706;
-}
-
-/* ===== BODY ===== */
+/* ======================================================
+BODY
+====================================================== */
 body{
-    background:var(--bg-main);
-    color:var(--text-main);
+  background: radial-gradient(circle at top, #1e293b, #020617);
+  color:#e2e8f0;
 }
 
-/* ===== SIDEBAR ===== */
+/* ======================================================
+LAYOUT
+====================================================== */
+.layout{
+  display:flex;
+  min-height:100vh;
+}
+
+/* ======================================================
+SIDEBAR
+====================================================== */
 .sidebar{
-    width:220px;
-    height:100vh;
-    background:var(--bg-main);
-    padding:20px;
-    position:fixed;
-    top:0;
-    left:0;
-    border-right:1px solid var(--border);
+  width:240px;
+  background:linear-gradient(180deg,#020617,#000);
+  padding:20px;
+  border-right:1px solid rgba(255,255,255,0.05);
 }
 
 .sidebar h2{
-    color:var(--accent);
-    margin-bottom:20px;
+  margin-bottom:25px;
 }
 
-.sidebar ul{
-    list-style:none;
+.sidebar a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px;
+  color:#94a3b8;
+  text-decoration:none;
+  border-radius:10px;
+  margin-bottom:8px;
+  transition:.2s;
 }
 
-.sidebar ul li{
-    margin:10px 0;
+.sidebar a:hover{
+  background:#1e293b;
+  color:#fff;
 }
 
-.sidebar ul li a{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:10px;
-    border-radius:8px;
-    text-decoration:none;
-    color:var(--text-soft);
-    transition:0.2s;
+.sidebar .active{
+  background:#2563eb;
+  color:#fff;
 }
 
-.sidebar ul li a:hover{
-    background:var(--bg-card);
-    color:var(--accent);
+.logout{
+  color:#f87171;
 }
 
-/* ===== MAIN ===== */
+/* ======================================================
+MAIN
+====================================================== */
 .main{
-    margin-left:220px;
-    padding:40px 20px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+  flex:1;
+  padding:30px;
 }
 
-.main > *{
-    width:100%;
-    max-width:1100px;
+/* ======================================================
+TITULOS
+====================================================== */
+h1{
+  font-size:26px;
+  margin-bottom:20px;
 }
 
-/* ===== HEADER ===== */
-.header{
-    margin-bottom:25px;
+h2{
+  font-size:18px;
+  margin-bottom:10px;
+  color:#94a3b8;
 }
 
-.header h1{
-    font-size:28px;
+/* ======================================================
+CARDS
+====================================================== */
+.card{
+  background: linear-gradient(145deg,#0f172a,#020617);
+  border:1px solid rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:20px;
 }
 
-.header p{
-    color:var(--text-soft);
+/* ======================================================
+GRID
+====================================================== */
+.grid{
+  display:grid;
+  grid-template-columns:2fr 1fr auto;
+  gap:10px;
 }
 
-/* ===== CARD FORM ===== */
-.card-form{
-    background:var(--bg-card);
-    padding:25px;
-    border-radius:14px;
-    margin-bottom:25px;
-    border:1px solid var(--border);
-    box-shadow:0 10px 30px rgba(0,0,0,0.4);
+/* ======================================================
+INPUTS
+====================================================== */
+select,input{
+  padding:10px;
+  border-radius:8px;
+  background:#020617;
+  color:white;
+  border:1px solid rgba(255,255,255,0.05);
+  outline:none;
 }
 
-/* ===== GRID ===== */
-.grid-form{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:15px;
+select:focus,input:focus{
+  border:1px solid #3b82f6;
 }
 
-/* ===== INPUTS ===== */
-.form-group{
-    display:flex;
-    flex-direction:column;
+/* ======================================================
+BOTONES
+====================================================== */
+button{
+  padding:10px 14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:#2563eb;
+  color:white;
+  font-weight:600;
+  transition:.2s;
 }
 
-.form-group label{
-    font-size:12px;
-    color:var(--text-soft);
-    margin-bottom:5px;
+button:hover{
+  background:#1d4ed8;
 }
 
-input, select{
-    padding:12px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background:var(--bg-main);
-    color:white;
-    outline:none;
-    transition:0.2s;
+/* ======================================================
+CLIENTE BOX
+====================================================== */
+.cliente-box{
+  display:flex;
+  gap:12px;
+  margin-top:10px;
 }
 
-input:focus, select:focus{
-    border:1px solid var(--primary);
-    box-shadow:0 0 0 2px rgba(14,165,233,0.2);
+.cliente-box div{
+  flex:1;
+  background:#020617;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.05);
 }
 
-/* ===== BOTÓN AGREGAR ===== */
-.btn-agregar{
-    margin-top:20px;
-    padding:12px;
-    background:linear-gradient(135deg,#38bdf8,#0ea5e9);
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    transition:0.3s;
-    color:white;
+.cliente-box span{
+  font-size:12px;
+  color:#64748b;
 }
 
-.btn-agregar:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(56,189,248,0.4);
+.cliente-box p{
+  font-size:14px;
+  font-weight:600;
 }
 
-/* ===== TABLA ===== */
-.tabla{
-    width:100%;
-    background:var(--bg-card);
-    border-radius:14px;
-    overflow:hidden;
-    margin-top:15px;
-    border:1px solid var(--border);
-    box-shadow:0 15px 40px rgba(0,0,0,0.5);
+/* ======================================================
+PRODUCTO INFO
+====================================================== */
+.producto-info{
+  display:flex;
+  gap:12px;
+  margin-top:10px;
 }
 
-.tabla h3{
-    padding:15px;
+.producto-info div{
+  flex:1;
+  background:#020617;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.05);
 }
 
-.tabla table{
-    width:100%;
-    border-collapse:collapse;
+/* ======================================================
+TABLA APP
+====================================================== */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:10px;
 }
 
-.tabla th{
-    padding:14px;
-    font-size:12px;
-    color:var(--accent);
-    text-transform:uppercase;
-    background:var(--bg-main);
+th{
+  padding:8px;
+  font-size:12px;
+  color:#64748b;
+  text-align:left;
 }
 
-.tabla td{
-    padding:14px;
-    text-align:center;
-    border-top:1px solid var(--border);
-    color:var(--text-soft);
+td{
+  padding:8px;
+  font-size:13px;
 }
 
-.tabla tr:hover{
-    background:rgba(56,189,248,0.08);
+tr{
+  border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-/* ===== BOTONES TABLA ===== */
-.btn-eliminar{
-    background:var(--danger);
-    padding:6px 10px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    color:white;
-}
-.btn-eliminar:hover{
-    background:var(--danger-hover);
+/* ======================================================
+TOTAL
+====================================================== */
+.total-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  flex-wrap:wrap;
 }
 
-/* ===== BOTONES HISTORIAL ===== */
-.btn-ver{ background:#3b82f6; }
-.btn-ver:hover{ background:#2563eb; }
-
-.btn-editar{ background:var(--success); }
-.btn-editar:hover{ background:var(--success-hover); }
-
-.btn-hist-eliminar{ background:var(--danger); }
-.btn-hist-eliminar:hover{ background:var(--danger-hover); }
-
-.btn-ver,
-.btn-editar,
-.btn-hist-eliminar{
-    padding:6px 10px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    color:white;
+.total-card h3{
+  font-size:16px;
 }
 
-/* ===== TOTALES ===== */
-.total-box{
-    margin-top:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:20px;
-    flex-wrap:wrap;
-    background:var(--bg-card);
-    padding:20px;
-    border-radius:12px;
-    border:1px solid var(--border);
+.total-card .final h2{
+  color:#22c55e;
+  font-size:24px;
 }
 
-.totales-box{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    min-width:220px;
-}
-
-.linea-total{
-    display:flex;
-    justify-content:space-between;
-    font-size:14px;
-    color:#cbd5f5;
-}
-
-.total-final{
-    margin-top:6px;
-    padding-top:8px;
-    border-top:1px solid var(--border);
-    font-size:20px;
-    font-weight:bold;
-    color:var(--success);
-}
-
-/* ===== BOTONES ACCIONES ===== */
-.acciones-box{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-}
-
-.acciones-box button{
-    padding:10px 16px;
-    border:none;
-    border-radius:10px;
-    cursor:pointer;
-    color:white;
-    display:flex;
-    align-items:center;
-    gap:6px;
-    transition:0.2s;
-}
-
-.btn-guardar{ background:var(--success); }
-.btn-guardar:hover{ background:var(--success-hover); }
-
-.btn-limpiar{ background:var(--warning); }
-.btn-limpiar:hover{ background:var(--warning-hover); }
-
-.btn-reset{ background:var(--danger); }
-.btn-reset:hover{ background:var(--danger-hover); }
-
-/* ===== MODAL ===== */
+/* ======================================================
+MODAL
+====================================================== */
 .modal{
-    display:none;
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,0.7);
-    justify-content:center;
-    align-items:center;
-    z-index:999;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.85);
+  display:none;
+  justify-content:center;
+  align-items:center;
 }
 
 .modal-content{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* ======================================================
+================ PDF PROFESIONAL ========================
+====================================================== */
+
+.page{
+  width:210mm;
+  min-height:297mm;
+  margin:auto;
+  background:#fff;
+  padding:20mm;
+
+  display:flex;
+  flex-direction:column;
+}
+
+/* CONTENIDO DINÁMICO */
+.content{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between; /* 🔥 clave */
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+}
+
+.logo{
+  height:75px;
+  margin-bottom:6px;
+}
+
+.title{
+  font-size:18px;
+  font-weight:bold;
+  color:#1e3a5f;
+}
+
+.tag{
+  font-size:12px;
+  color:#2563eb;
+}
+
+/* LINEA */
+.line{
+  border-top:2px solid #1e3a5f;
+  margin:8px 0;
+}
+
+/* TOP */
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.badge{
+  background:#1e3a5f;
+  color:#fff;
+  padding:5px 10px;
+  border-radius:6px;
+  font-weight:bold;
+  font-size:12px;
+}
+
+/* CLIENTE */
+.cliente{
+  display:flex;
+  justify-content:space-between;
+  background:#f1f5f9;
+  padding:8px;
+  border-radius:8px;
+  margin-top:8px;
+  font-size:12px;
+}
+
+/* TABLA PDF */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:8px;
+}
+
+th{
+  background:#1e3a5f;
+  color:white;
+  padding:7px;
+  font-size:11px;
+}
+
+td{
+  border:1px solid #ddd;
+  padding:7px;
+  text-align:center;
+  font-size:11px;
+}
+
+/* TOTALES */
+.total-box{
+  margin-top:8px;
+  width:220px;
+  margin-left:auto;
+  border:1px solid #ccc;
+  padding:8px;
+  border-radius:8px;
+  background:#f9fafb;
+  font-size:12px;
+}
+
+.total{
+  font-size:16px;
+  color:#16a34a;
+  font-weight:bold;
+}
+
+/* CONDICIONES */
+.cond{
+  margin-top:10px;
+  font-size:11px;
+}
+
+/* FOOTER */
+.footer{
+  margin-top:8px;
+  text-align:center;
+}
+
+/* IMAGEN FOOTER */
+.footer img{
+  width:100%;
+  height:auto;
+  display:block;
+  margin-top:8px;
+}
+
+/* PRINT */
+@media print{
+  body{
     background:white;
-    padding:20px;
-    border-radius:10px;
-    width:95%;
-    max-width:500px;
-    max-height:90vh;
-    overflow-y:auto;
-}
-
-/* ===== BOLETA (AISLADA) ===== */
-#modalBody{
-    width:100%;
-    overflow-x:auto;
-}
-
-#boleta{
-    font-family:Arial;
-    font-size:12px;
-    color:#000;
-    width:100%;
-    min-width:320px;
-    background:white;
-    padding:10px;
-}
-
-#boleta table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-#boleta th, #boleta td{
-    border-bottom:1px solid #000;
-    padding:5px;
-    text-align:center;
-}
-
-/* BOLETA DETALLES */
-.empresa{ text-align:center; }
-.linea{ border:1px solid #000; margin:5px 0; }
-.cabecera{ display:flex; justify-content:space-between; font-weight:bold; }
-.info{ display:flex; justify-content:space-between; margin:5px 0; }
-
-.boleta-total-final{
-    background:#000;
-    color:#fff;
-    padding:5px;
-    font-weight:bold;
-}
-
-.pago{ text-align:center; margin-top:5px; }
-.gracias{ text-align:center; margin-top:10px; }
-
-/* ===== ACCIONES MODAL ===== */
-.acciones{
-    margin-top:10px;
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-}
-
-.acciones button{
-    padding:8px;
-    border:none;
-    cursor:pointer;
-}
-
-/* ===== SCROLL ===== */
-::-webkit-scrollbar{
-    width:8px;
-}
-::-webkit-scrollbar-thumb{
-    background:#1e293b;
-    border-radius:10px;
-}
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-
-    .sidebar{
-        display:none;
-    }
-
-    .main{
-        margin-left:0;
-    }
-
-    .grid-form{
-        grid-template-columns:1fr;
-    }
-
-    .total-box{
-        flex-direction:column;
-        gap:15px;
-    }
+  }
 }

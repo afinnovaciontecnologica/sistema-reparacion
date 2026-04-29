@@ -1,16 +1,11 @@
-
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Clientes</title>
 
-<!-- CSS -->
-<link rel="stylesheet" href="/css/clientes.css">
-
-<!-- ICONOS -->
+<link rel="stylesheet" href="../css/clientes.css">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 </head>
@@ -19,99 +14,100 @@
 
 <!-- SIDEBAR -->
 <div class="sidebar">
+    <h2>🛠 Sistema</h2>
 
-<h2>🛠 Sistema</h2>
+    <a href="/dashboard.html" id="menu-dashboard">
+        <i class="fa fa-home"></i> Inicio
+    </a>
 
-<a href="/dashboard.html" id="menu-inicio">
-    <i class="fa fa-home"></i> Inicio
-</a>
+    <a href="clientes.html" id="menu-clientes" class="active">
+        <i class="fa fa-users"></i> Clientes
+    </a>
 
-<a href="clientes.html" class="active" id="menu-clientes">
-    <i class="fa fa-users"></i> Clientes
-</a>
+    <a href="cotizaciones.html" id="menu-cotizacion">
+        <i class="fa fa-file-alt"></i> Cotización
+    </a>
 
-<a href="productos.html" id="menu-productos">
-    <i class="fa fa-box"></i> Productos
-</a>
+    <a href="productos.html" id="menu-productos">
+        <i class="fa fa-box"></i> Productos
+    </a>
 
-<a href="reparaciones.html" id="menu-reparaciones">
-    <i class="fa fa-tools"></i> Reparaciones
-</a>
+    <a href="reparaciones.html" id="menu-reparaciones">
+        <i class="fa fa-tools"></i> Reparaciones
+    </a>
 
-<a href="ventas.html" id="menu-ventas">
-    <i class="fa fa-shopping-cart"></i> Ventas
-</a>
+    <a href="ventas.html" id="menu-ventas">
+        <i class="fa fa-shopping-cart"></i> Ventas
+    </a>
 
-<a href="cotizaciones.html" id="menu-cotizacion">
-    <i class="fa fa-file-alt"></i> Cotización
-</a>
+    <a href="historial.html" id="menu-historial">
+        <i class="fa fa-clock"></i> Historial
+    </a>
 
-<a href="historial.html" id="menu-historial">
-    <i class="fa fa-clock"></i> Historial
-</a>
-
-<a href="#" id="btnLogout">
-    <i class="fa fa-sign-out-alt"></i> Salir
-</a>
-
+    <a href="#" id="btnLogout">
+        <i class="fa fa-sign-out-alt"></i> Salir
+    </a>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<h1><i class="fa fa-users"></i> Clientes</h1>
+<h1>👥 Gestión de Clientes</h1>
+<hr>
 
 <!-- FORMULARIO -->
 <div class="card">
+<h3>➕ Nuevo Cliente</h3>
 
-    <input type="text" id="buscar" placeholder="🔎 Buscar cliente..." onkeyup="buscarCliente()">
+<div class="grid">
+    <input type="text" id="nombre" placeholder="Nombre completo">
+    <input type="text" id="telefono" placeholder="Teléfono">
+    <input type="email" id="correo" placeholder="Correo">
+    <input type="text" id="direccion" placeholder="Dirección">
+</div>
 
-    <div class="form-grid">
-        <input type="text" id="nombre" placeholder="Nombre">
-        <input type="text" id="telefono" placeholder="Teléfono">
-        <input type="email" id="correo" placeholder="Correo">
+<button onclick="guardarCliente()">Guardar Cliente</button>
+</div>
 
-        <button onclick="guardarCliente()">
-            <i class="fa fa-save"></i> Guardar
-        </button>
-    </div>
-
+<!-- BUSCADOR -->
+<div class="card">
+<h3>🔎 Buscar Cliente</h3>
+<input type="text" id="buscarCliente" placeholder="Buscar por nombre, teléfono, correo o dirección...">
 </div>
 
 <!-- TABLA -->
 <div class="card">
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nombre</th>
-                <th>Teléfono</th>
-                <th>Correo</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
+<h3>📋 Lista de Clientes</h3>
 
-        <tbody id="tablaClientes">
-            <tr>
-                <td colspan="5">No hay clientes</td>
-            </tr>
-        </tbody>
-    </table>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Teléfono</th>
+<th>Correo</th>
+<th>Dirección</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaClientes"></tbody>
+</table>
+
 </div>
 
 </div>
 
 <!-- JS -->
-<script src="/js/clientes.js"></script>
-<script src="/js/roles.js"></script>
-<script src="/js/protect.js"></script>
+<script src="../js/guard.js"></script>
+<script src="../js/clientes.js"></script>
 
 <!-- LOGOUT -->
 <script>
 document.getElementById("btnLogout").addEventListener("click", function(e){
     e.preventDefault();
     localStorage.removeItem("rol");
-    window.location.href = "/login.html";
+    localStorage.removeItem("user");
+    window.location.href = "/index.html";
 });
 </script>
 

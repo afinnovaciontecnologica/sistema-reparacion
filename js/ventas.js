@@ -635,7 +635,6 @@ function cerrarBoleta(){
 
 function generarBoletaHTML(venta){
 
-// 🔥 calcular descuento total
 let descuentoTotal = 0;
 
 (venta.items || []).forEach(p => {
@@ -647,46 +646,42 @@ let subtotal = venta.total + descuentoTotal;
 return `
 <div class="ticket">
 
-    <!-- EMPRESA -->
     <div class="header-empresa">
         <img src="/assets/img/logo.png" class="logo">
         <h2>INNOVACION TECNOLOGICA</h2>
         <p>RUC: 10416270258</p>
-        <p>Jr. Lucar y Torre #454</p>
         <p>Huaraz - Ancash</p>
-        <p>Whatsapp: 948231352</p>
-        <p>Email: afinnovaciontecnologica@gmail.com</p>
+        <p>Cel: 948231352</p>
     </div>
 
     <div class="linea"></div>
 
-    <!-- BOLETA -->
     <div class="boleta-info">
-        <p><b>BOLETA DE VENTA</b></p>
-        <p>${venta.numero}</p>
-        <p>Fecha: ${venta.fecha}</p>
-        <p>Cliente: ${venta.cliente}</p>
+        <p><b>${venta.comprobante.toUpperCase()}:</b> ${venta.numero}</p>
+        <p><b>Fecha:</b> ${venta.fecha}</p>
+        <p><b>Cliente:</b> ${venta.cliente}</p>
+        <p><b>Teléfono:</b> ${venta.telefono}</p>
+        <p><b>Correo:</b> ${venta.correo}</p>
     </div>
 
     <div class="linea"></div>
 
-    <!-- DETALLE -->
     <table class="detalle">
         <thead>
             <tr>
-                <th>CANT</th>
-                <th>DESCRIPCIÓN</th>
-                <th>P.U</th>
                 <th>DESC</th>
+                <th>CANT</th>
+                <th>P.U</th>
+                <th>SUB</th>
             </tr>
         </thead>
         <tbody>
             ${(venta.items || []).map(p => `
                 <tr>
+                    <td>${p.descripcion || p.nombre}</td>
                     <td>${p.cantidad}</td>
-                    <td>${p.nombre}</td>
-                    <td>S/. ${p.precio.toFixed(2)}</td>
-                    <td>S/. ${(p.descuento || 0).toFixed(2)}</td>
+                    <td>${p.precio.toFixed(2)}</td>
+                    <td>${(p.precio * p.cantidad).toFixed(2)}</td>
                 </tr>
             `).join("")}
         </tbody>
@@ -694,33 +689,21 @@ return `
 
     <div class="linea"></div>
 
-    <!-- TOTALES -->
     <div class="totales">
-        <p>SUBTOTAL: S/. ${subtotal.toFixed(2)}</p>
-
+        <p>SUBTOTAL: S/ ${subtotal.toFixed(2)}</p>
         ${
             descuentoTotal > 0
-            ? `<p class="descuento">DESCUENTO: - S/. ${descuentoTotal.toFixed(2)}</p>`
+            ? `<p class="descuento">DESCUENTO: - S/ ${descuentoTotal.toFixed(2)}</p>`
             : ""
         }
-
-        <p class="total">TOTAL: S/. ${venta.total.toFixed(2)}</p>
+        <h3 class="total">TOTAL: S/ ${venta.total.toFixed(2)}</h3>
     </div>
 
     <div class="linea"></div>
 
-    <!-- PAGO -->
-    <p class="pago">${venta.metodo.toUpperCase()}</p>
+    <p class="pago">PAGO: ${venta.metodo.toUpperCase()}</p>
 
-    <div class="linea"></div>
-
-    <!-- MENSAJE -->
     <p class="gracias">¡GRACIAS POR SU COMPRA!</p>
-
-    <!-- QR -->
-    <div class="qr">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${venta.numero}" />
-    </div>
 
 </div>
 `;
@@ -767,10 +750,9 @@ function verVenta(i){
 
     let venta = ventas[i];
 
-    let html = generarBoletaHTML(venta);
+    let html = generarBoletaHTML(venta); // 🔥 USA TU SISTEMA REAL
 
     document.getElementById("boletaVista").innerHTML = html;
-    document.getElementById("boletaHTML").innerHTML = html;
 
     document.getElementById("modalBoleta").style.display = "flex";
 }
@@ -929,3 +911,37 @@ function descargarPDFManual(){
     html2pdf().from(contenedor).set(opciones).save();
 }
 
+function guardarVenta(){
+
+    const cliente = document.getElementById("cliente").value
+
+    if(!cliente || listaProductos.length === 0){
+        alert("Faltan datos")
+        return
+    }
+
+    let ventas = JSON.parse(localStorage.getItem("ventas")) || []
+    let contador = Number(localStorage.getItem("contadorBoleta")) || 1
+
+    const total = listaProductos.reduce((acc, p) => acc + p.subtotal, 0)
+
+    const nuevaVenta = {
+        numero: "B001-" + String(contador).padStart(8,"0"),
+        cliente: cliente,
+        fecha: new Date().toLocaleString(),
+        total: total,
+        productos: listaProductos  // 🔥 ESTO ES LO QUE TE FALTA
+    }
+
+    ventas.push(nuevaVenta)
+
+    localStorage.setItem("ventas", JSON.stringify(ventas))
+    localStorage.setItem("contadorBoleta", contador + 1)
+
+    alert("Venta guardada correctamente")
+
+    // limpiar
+    listaProductos = []
+    document.getElementById("cliente").value = ""
+    renderTabla()
+}

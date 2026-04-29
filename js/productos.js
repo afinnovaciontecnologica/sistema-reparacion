@@ -1,4 +1,3 @@
-javascript
 /* ===============================
 📦 DATOS BASE
 =============================== */
@@ -24,39 +23,35 @@ const categoriasBase = [
 ];
 
 /* ===============================
-🔐 ROL + PROTECCIÓN
+🔐 ROL
 =============================== */
 const rol = localStorage.getItem("rol");
-
 if(!rol){
-    window.location.href = "/login.html";
+    window.location.href = "../index.html";
 }
 
 /* ===============================
-📦 STORAGE SEGURO
+📦 STORAGE
 =============================== */
-let productos = [];
-let categorias = [];
-
-try{
-    productos = JSON.parse(localStorage.getItem("productos")) || [];
-}catch(e){
-    productos = [];
-}
-
-try{
-    categorias = JSON.parse(localStorage.getItem("categorias")) || categoriasBase;
-}catch(e){
-    categorias = categoriasBase;
-}
+let productos = JSON.parse(localStorage.getItem("productos")) || [];
+let categorias = JSON.parse(localStorage.getItem("categorias")) || categoriasBase;
 
 localStorage.setItem("categorias", JSON.stringify(categorias));
 
 /* ===============================
 🎯 ELEMENTOS
 =============================== */
-const selectCategoria = document.getElementById("categoria");
-const selectSubcategoria = document.getElementById("subcategoria");
+let selectCategoria;
+let selectSubcategoria;
+
+const nombre = document.getElementById("nombre");
+const descripcion = document.getElementById("descripcion");
+const precio = document.getElementById("precio");
+const stock = document.getElementById("stock");
+const imagen = document.getElementById("imagen");
+const tabla = document.getElementById("tablaProductos");
+const buscar = document.getElementById("buscar");
+const preview = document.getElementById("previewImg");
 
 /* ===============================
 🧠 ESTADO
@@ -64,231 +59,207 @@ const selectSubcategoria = document.getElementById("subcategoria");
 let editandoIndex = null;
 
 /* ===============================
-🚀 CARGAR CATEGORÍAS
+🚀 INIT
 =============================== */
-function cargarCategorias(){
-if(!selectCategoria || !selectSubcategoria) return;
+document.addEventListener("DOMContentLoaded", () => {
 
-selectCategoria.innerHTML = "<option value=''>Categoría</option>";
-selectSubcategoria.innerHTML = "<option value=''>Subcategoría</option>";
+    selectCategoria = document.getElementById("categoria");
+    selectSubcategoria = document.getElementById("subcategoria");
 
-categorias.forEach((c, i)=>{
-    selectCategoria.innerHTML += `<option value="${i}">${c.nombre}</option>`;
+    cargarCategorias();
+    activarCambioCategoria();
+    render();
+
+    document.getElementById("btnGuardar").addEventListener("click", guardarProducto);
+    buscar.addEventListener("keyup", e => render(e.target.value));
 });
-}
 
 /* ===============================
-🔄 CAMBIO CATEGORÍA
+📂 CATEGORÍAS
 =============================== */
-if(selectCategoria){
-selectCategoria.addEventListener("change", function(){
+function cargarCategorias(){
+    selectCategoria.innerHTML = "<option value=''>Categoría</option>";
 
-let index = this.value;
-selectSubcategoria.innerHTML = "<option value=''>Subcategoría</option>";
-
-if(index !== ""){
-    categorias[index].subcategorias.forEach(sub=>{
-        selectSubcategoria.innerHTML += `<option value="${sub}">${sub}</option>`;
+    categorias.forEach((c, i)=>{
+        selectCategoria.innerHTML += `<option value="${i}">${c.nombre}</option>`;
     });
 }
 
-});
+function activarCambioCategoria(){
+    selectCategoria.addEventListener("change", () => {
+
+        const index = selectCategoria.value;
+        selectSubcategoria.innerHTML = "<option value=''>Subcategoría</option>";
+
+        if(index !== ""){
+            categorias[index].subcategorias.forEach(sub=>{
+                selectSubcategoria.innerHTML += `<option value="${sub}">${sub}</option>`;
+            });
+        }
+    });
 }
 
 /* ===============================
-💾 GUARDAR / EDITAR
+💾 GUARDAR
 =============================== */
 function guardarProducto(){
 
-if(rol !== "admin") return alert("❌ Solo admin puede guardar");
+    if(rol !== "admin"){
+        return alert("❌ Solo admin puede guardar");
+    }
 
-let nombre = document.getElementById("nombre").value.trim();
-let descripcion = document.getElementById("descripcion").value.trim();
-let categoriaIndex = selectCategoria.value;
-let subcategoria = selectSubcategoria.value;
-let precio = Number(document.getElementById("precio").value);
-let stock = Number(document.getElementById("stock").value);
-let imagenInput = document.getElementById("imagen");
-let imagen = imagenInput.files[0];
+    const categoriaIndex = selectCategoria.value;
 
-if(!nombre || !descripcion || categoriaIndex === "" || !subcategoria || !precio || !stock){
-    return alert("⚠️ Completa todos los campos");
-}
+    const precioVal = Number(precio.value);
+    const stockVal = Number(stock.value);
 
-if(precio <= 0 || stock < 0){
-    return alert("⚠️ Datos inválidos");
-}
+    if(
+        !nombre.value.trim() ||
+        !descripcion.value.trim() ||
+        categoriaIndex === "" ||
+        !selectSubcategoria.value ||
+        precioVal <= 0 ||
+        isNaN(precioVal) ||
+        stockVal < 0 ||
+        isNaN(stockVal)
+    ){
+        return alert("⚠️ Completa correctamente los campos");
+    }
 
-let categoria = categorias[categoriaIndex].nombre;
+    const categoriaNombre = categorias[categoriaIndex].nombre;
 
-if(editandoIndex !== null){
+    const procesar = (imgBase64) => {
 
-    let producto = productos[editandoIndex];
-
-    producto.nombre = nombre;
-    producto.descripcion = descripcion;
-    producto.categoria = categoria;
-    producto.subcategoria = subcategoria;
-    producto.precio = precio;
-    producto.stock = stock;
-
-    if(imagen){
-        let reader = new FileReader();
-        reader.onload = e=>{
-            producto.imagen = e.target.result;
-            guardarFinal();
+        const data = {
+            nombre: nombre.value.trim(),
+            descripcion: descripcion.value.trim(),
+            categoria: categoriaNombre,
+            subcategoria: selectSubcategoria.value,
+            precio: precioVal,
+            stock: stockVal,
+            imagen: imgBase64
         };
-        reader.readAsDataURL(imagen);
-    } else {
-        guardarFinal();
-    }
 
-} else {
+        if(editandoIndex !== null){
+            productos[editandoIndex] = data;
+            editandoIndex = null;
+        } else {
+            productos.push(data);
+        }
 
-    if(!imagen){
-        return alert("⚠️ Debes subir una imagen");
-    }
-
-    let reader = new FileReader();
-
-    reader.onload = e=>{
-        productos.push({
-            nombre,
-            descripcion,
-            categoria,
-            subcategoria,
-            precio,
-            stock,
-            imagen: e.target.result
-        });
-        guardarFinal();
+        localStorage.setItem("productos", JSON.stringify(productos));
+        limpiar();
+        render();
     };
 
-    reader.readAsDataURL(imagen);
-}
-}
-
-/* ===============================
-💾 FINAL GUARDADO
-=============================== */
-function guardarFinal(){
-localStorage.setItem("productos", JSON.stringify(productos));
-mostrarProductos();
-limpiarFormulario();
-editandoIndex = null;
+    if(imagen.files[0]){
+        const reader = new FileReader();
+        reader.onload = e => procesar(e.target.result);
+        reader.readAsDataURL(imagen.files[0]);
+    } else {
+        procesar(productos[editandoIndex]?.imagen || null);
+    }
 }
 
 /* ===============================
-📊 MOSTRAR PRODUCTOS
+📊 RENDER
 =============================== */
-function mostrarProductos(lista = productos){
+function render(filtro = ""){
 
-let tabla = document.getElementById("tablaProductos");
-if(!tabla) return;
+    tabla.innerHTML = "";
 
-tabla.innerHTML = "";
+    const lista = productos.filter(p =>
+        p.nombre.toLowerCase().includes(filtro.toLowerCase()) ||
+        p.descripcion.toLowerCase().includes(filtro.toLowerCase()) ||
+        p.categoria.toLowerCase().includes(filtro.toLowerCase())
+    );
 
-if(lista.length === 0){
-    tabla.innerHTML = `<tr><td colspan="6">Sin productos</td></tr>`;
-    return;
-}
+    if(lista.length === 0){
+        tabla.innerHTML = `<tr><td colspan="6">Sin productos</td></tr>`;
+        return;
+    }
 
-lista.forEach((p, i) => {
-    tabla.innerHTML += `
-    <tr>
-        <td>${p.nombre}</td>
-        <td>${p.descripcion}<br><small>${p.categoria} - ${p.subcategoria}</small></td>
-        <td>S/ ${parseFloat(p.precio).toFixed(2)}</td>
-        <td>${p.stock}</td>
-        <td><img src="${p.imagen}" style="width:60px;height:60px;object-fit:cover;"></td>
-        <td>
-            ${rol === "admin" ? `
-                <button onclick="editar(${i})">✏️</button>
-                <button onclick="eliminar(${i})">🗑️</button>
-            ` : `<span>Sin permisos</span>`}
-        </td>
-    </tr>
-    `;
-});
-}
-
-/* ===============================
-❌ ELIMINAR
-=============================== */
-function eliminar(i){
-if(rol !== "admin") return alert("❌ Sin permiso");
-
-if(confirm("¿Eliminar este producto?")){
-    productos.splice(i,1);
-    localStorage.setItem("productos", JSON.stringify(productos));
-    mostrarProductos();
-}
+    lista.forEach((p, i)=>{
+        tabla.innerHTML += `
+        <tr>
+            <td>${p.nombre}</td>
+            <td>${p.descripcion}<br><small>${p.categoria} - ${p.subcategoria}</small></td>
+            <td>S/ ${p.precio.toFixed(2)}</td>
+            <td>${p.stock}</td>
+            <td>${p.imagen ? `<img src="${p.imagen}">` : "Sin imagen"}</td>
+            <td>
+                ${rol === "admin" ? `
+                    <button class="btn editar" onclick="editar(${i})">✏️</button>
+                    <button class="btn eliminar" onclick="eliminar(${i})">🗑️</button>
+                ` : `Sin permisos`}
+            </td>
+        </tr>
+        `;
+    });
 }
 
 /* ===============================
 ✏️ EDITAR
 =============================== */
-function editar(i){
+window.editar = (i) => {
 
-if(rol !== "admin") return alert("❌ Sin permiso");
+    const p = productos[i];
 
-let p = productos[i];
+    nombre.value = p.nombre;
+    descripcion.value = p.descripcion;
+    precio.value = p.precio;
+    stock.value = p.stock;
 
-document.getElementById("nombre").value = p.nombre;
-document.getElementById("descripcion").value = p.descripcion;
-document.getElementById("precio").value = p.precio;
-document.getElementById("stock").value = p.stock;
+    const index = categorias.findIndex(c => c.nombre === p.categoria);
+    selectCategoria.value = index;
+    selectCategoria.dispatchEvent(new Event("change"));
 
-let index = categorias.findIndex(c => c.nombre === p.categoria);
+    const wait = setInterval(()=>{
+        if(selectSubcategoria.options.length > 1){
+            selectSubcategoria.value = p.subcategoria;
+            clearInterval(wait);
+        }
+    },10);
 
-selectCategoria.value = index;
-selectCategoria.dispatchEvent(new Event("change"));
+    if(p.imagen){
+        preview.src = p.imagen;
+        preview.style.display = "block";
+    }
 
-setTimeout(()=>{
-    selectSubcategoria.value = p.subcategoria;
-}, 50);
-
-editandoIndex = i;
-}
+    editandoIndex = i;
+};
 
 /* ===============================
-🔍 BUSCAR
+🗑 ELIMINAR
 =============================== */
-function buscarProducto(){
+window.eliminar = (i) => {
 
-let texto = document.getElementById("buscar").value.toLowerCase();
+    if(rol !== "admin"){
+        return alert("❌ Sin permiso");
+    }
 
-let filtrados = productos.filter(p =>
-    p.nombre.toLowerCase().includes(texto) ||
-    p.descripcion.toLowerCase().includes(texto) ||
-    p.categoria.toLowerCase().includes(texto) ||
-    p.subcategoria.toLowerCase().includes(texto)
-);
-
-mostrarProductos(filtrados);
-}
+    if(confirm("¿Eliminar producto?")){
+        productos.splice(i,1);
+        localStorage.setItem("productos", JSON.stringify(productos));
+        render();
+    }
+};
 
 /* ===============================
 🧹 LIMPIAR
 =============================== */
-function limpiarFormulario(){
+function limpiar(){
+    nombre.value = "";
+    descripcion.value = "";
+    precio.value = "";
+    stock.value = "";
+    imagen.value = "";
 
-document.getElementById("nombre").value = "";
-document.getElementById("descripcion").value = "";
-document.getElementById("precio").value = "";
-document.getElementById("stock").value = "";
-document.getElementById("imagen").value = "";
+    selectCategoria.value = "";
+    selectSubcategoria.innerHTML = "<option value=''>Subcategoría</option>";
 
-selectCategoria.value = "";
-selectSubcategoria.innerHTML = "<option value=''>Subcategoría</option>";
+    preview.style.display = "none";
+    preview.src = "";
 }
-
-/* ===============================
-🔥 INIT
-=============================== */
-document.addEventListener("DOMContentLoaded", () => {
-cargarCategorias();
-mostrarProductos();
-});
 
 

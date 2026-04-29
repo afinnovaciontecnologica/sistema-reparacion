@@ -3,19 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard - Sistema</title>
 
-<!-- CSS -->
-<link rel="stylesheet" href="./css/styles.css">
-<link rel="stylesheet" href="./css/dashboard.css">
+<title>Dashboard - AF Innovación Tecnológica</title>
 
 <!-- ICONOS -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
 
-<!-- LIBRERÍAS -->
+<!-- CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<link rel="stylesheet" href="css/dashboard.css">
 
 </head>
 
@@ -24,155 +21,148 @@
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<h2>🛠 Sistema</h2>
+    <div>
 
-<ul>
+        <div class="logo">
+            <img src="/assets/img/logo.png" class="logo-img">
+            <h3>AF Innovación Tecnológica</h3>
+            <small>Sistema de Gestión</small>
+        </div>
 
-    <li><a href="./dashboard.html" class="active"><i class="fa fa-home"></i> Inicio</a></li>
+        <div class="menu">
 
-    <li><a href="./clientes.html"><i class="fa fa-users"></i> Clientes</a></li>
+            <a href="pages/clientes.html">
+                <i class="ri-user-3-line"></i> Clientes
+            </a>
 
-    <li><a href="./cotizaciones.html"><i class="fa fa-file-alt"></i> Cotización</a></li>
+            <a href="pages/ventas.html">
+                <i class="ri-shopping-bag-3-line"></i> Ventas
+            </a>
 
-    <li class="admin-only">
-        <a href="./productos.html"><i class="fa fa-box"></i> Productos</a>
-    </li>
+            <a href="pages/reparaciones.html">
+                <i class="ri-tools-line"></i> Reparaciones
+            </a>
 
-    <li><a href="./reparaciones.html"><i class="fa fa-tools"></i> Reparaciones</a></li>
+            <a href="pages/cotizaciones.html">
+                <i class="ri-file-list-3-line"></i> Cotizaciones
+            </a>
 
-    <li><a href="./ventas.html"><i class="fa fa-shopping-cart"></i> Ventas</a></li>
+            <div id="adminMenu">
 
-    <li class="admin-only">
-        <a href="./historial.html"><i class="fa fa-clock"></i> Historial</a>
-    </li>
+                <a href="pages/productos.html">
+                    <i class="ri-box-3-line"></i> Productos
+                </a>
 
-    <li>
-        <a href="#" id="btnLogout"><i class="fa fa-sign-out-alt"></i> Salir</a>
-    </li>
+                <a href="pages/historial.html">
+                    <i class="ri-history-line"></i> Historial
+                </a>
 
-</ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="logout-box">
+        <button class="logout-btn" onclick="logout()">
+            <i class="ri-logout-box-r-line"></i> Salir
+        </button>
+    </div>
 
 </div>
 
 <!-- MAIN -->
-<div class="main" id="reportArea">
+<div class="main">
 
-<!-- NAVBAR -->
-<div class="navbar">
-    <h1>Dashboard</h1>
-    <span id="welcomeText">Bienvenido</span>
-</div>
+    <!-- HEADER MODERNO -->
+    <div class="header">
 
-<!-- FILTROS -->
-<div class="filtros">
-    <button onclick="filtrar('hoy')">📅 Hoy</button>
-    <button onclick="filtrar('mes')">🗓️ Este mes</button>
-    <button onclick="filtrar('todo')">📊 Todo</button>
+        <div>
+            <h1>Dashboard</h1>
+            <p id="rolTexto">Cargando...</p>
+        </div>
 
-    <button id="btnDescargar" class="admin-only">📄 Descargar</button>
-</div>
+        <div class="header-actions">
 
-<!-- CARDS -->
-<div class="cards">
+            <button class="btn-action">
+                <i class="ri-notification-3-line"></i>
+            </button>
 
-    <div class="card">
-        <i class="fa fa-users"></i>
-        <h3>Clientes</h3>
-        <p id="totalClientes">0</p>
+            <button class="btn-action">
+                <i class="ri-settings-3-line"></i>
+            </button>
+
+            <div class="user-box">
+                <i class="ri-user-3-line"></i>
+                <span id="userRolMini"></span>
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="card">
-        <i class="fa fa-tools"></i>
-        <h3>Reparaciones</h3>
-        <p id="totalReparaciones">0</p>
+
+    <!-- STATS MODERNAS -->
+    <div class="stats">
+
+        <div class="stat">
+            <i class="ri-user-3-line"></i>
+            <div class="stat-text">
+                <span>Clientes</span>
+                <b id="clientesTotal">0</b>
+            </div>
+        </div>
+
+        <div class="stat">
+            <i class="ri-shopping-cart-2-line"></i>
+            <div class="stat-text">
+                <span>Ventas</span>
+                <b id="ventasTotal">0</b>
+            </div>
+        </div>
+
+        <div class="stat">
+            <i class="ri-money-dollar-circle-line"></i>
+            <div class="stat-text">
+                <span>Ingresos</span>
+                <b id="ingresosTotal">S/ 0</b>
+            </div>
+        </div>
+
+        <div class="stat">
+            <i class="ri-tools-line"></i>
+            <div class="stat-text">
+                <span>Reparaciones</span>
+                <b id="reparacionesTotal">0</b>
+            </div>
+        </div>
+
     </div>
 
-    <div class="card">
-        <i class="fa fa-shopping-cart"></i>
-        <h3>Ventas</h3>
-        <p id="totalVentas">0</p>
-    </div>
 
-    <div class="card">
-        <i class="fa fa-coins"></i>
-        <h3>Ingresos</h3>
-        <p id="ingresos">S/. 0</p>
+    <!-- GRAFICO -->
+    <div class="chart-box">
+        <div class="chart-header">
+            <h3>Ventas de la Semana</h3>
+        </div>
+        <canvas id="ventasChart"></canvas>
     </div>
 
 </div>
 
-<!-- MENSAJE VACÍO -->
-<div id="mensajeVacio" class="mensaje-vacio" style="display:none;">
-    ⚠️ No hay datos disponibles
-</div>
+<!-- JS -->
+<script src="js/dashboard.js"></script>
 
-<!-- GRÁFICOS -->
-<div class="graficos">
-
-    <div class="grafico-box">
-        <h2>📈 Ventas por día</h2>
-        <canvas id="graficoVentas"></canvas>
-    </div>
-
-    <div class="grafico-box">
-        <h2>🏆 Top Productos</h2>
-        <canvas id="topProductos"></canvas>
-    </div>
-
-</div>
-
-</div>
-
-<!-- 🔐 PROTECCIÓN (IMPORTANTE) -->
-<script type="module" src="./js/protect.js"></script>
-
-<!-- JS PRINCIPAL -->
-<script src="./js/dashboard.js"></script>
-<script src="./js/roles.js"></script>
-
-<!-- SCRIPT -->
 <script>
+/* MINI DETALLE UX */
 document.addEventListener("DOMContentLoaded", () => {
+    const rol = localStorage.getItem("rol")
+    const mini = document.getElementById("userRolMini")
 
-    const rol = localStorage.getItem("rol");
-    const welcome = document.getElementById("welcomeText");
-    const btnPDF = document.getElementById("btnDescargar");
-
-    // BIENVENIDA
-    if (rol === "admin") {
-        welcome.textContent = "Bienvenido, Administrador 👋";
-    } else {
-        welcome.textContent = "Bienvenido, Empleado 👋";
+    if(mini && rol){
+        mini.textContent = rol.toUpperCase()
     }
-
-    // LOGOUT
-    document.getElementById("btnLogout").onclick = (e) => {
-        e.preventDefault();
-        localStorage.removeItem("rol");
-        window.location.href = "./login.html";
-    };
-
-    // PDF SOLO ADMIN
-    if (rol === "admin") {
-        btnPDF.onclick = generarPDF;
-    }
-
-});
-
-// GENERAR PDF
-async function generarPDF(){
-
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    const area = document.getElementById("reportArea");
-    const canvas = await html2canvas(area);
-
-    const img = canvas.toDataURL("image/png");
-
-    doc.addImage(img,"PNG",0,0);
-    doc.save("reporte.pdf");
-}
+})
 </script>
 
 </body>

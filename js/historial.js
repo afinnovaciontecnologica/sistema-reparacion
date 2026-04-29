@@ -1,284 +1,257 @@
-javascript
-// ======================
-// STORAGE (SEGURO)
-// ======================
-let ventas = [];
-
-try{
-    ventas = JSON.parse(localStorage.getItem("ventas")) || [];
-}catch(e){
-    ventas = [];
-}
-
-if(!Array.isArray(ventas)){
-    ventas = [];
-}
-
-console.log("VENTAS CARGADAS HISTORIAL:", ventas);
-
-// ======================
-// INICIO
-// ======================
+/* =========================
+   🚀 INICIO
+========================= */
 document.addEventListener("DOMContentLoaded", () => {
 
-    renderVentas();
-    activarBuscador();
+    const tabla = document.getElementById("tablaHistorial")
+    const inputBuscar = document.getElementById("buscarVenta")
+    const vacio = document.getElementById("sinDatos")
 
-});
+    // 👉 Datos (si no hay en localStorage usa demo)
+    let ventas = JSON.parse(localStorage.getItem("ventas")) || [
+        {
+            numero:"B001-0000005",
+            cliente:"ANDY",
+            fecha:"28/04/2026",
+            telefono:"988174760",
+            correo:"soportehpn@gmail.com",
+            total:1000,
+            items:[
+                {nombre:"GAMER",cantidad:1,precio:1000}
+            ]
+        }
+    ]
 
-// ======================
-// RENDER TABLA
-// ======================
-function renderVentas(lista = ventas){
+    /* =========================
+       🧾 RENDER TABLA
+    ========================= */
+    function render(lista = ventas){
 
-    let tbody = document.getElementById("tablaHistorial");
+        tabla.innerHTML = ""
 
-    if(!tbody){
-        console.error("❌ No existe #tablaHistorial");
-        return;
-    }
+        if(lista.length === 0){
+            vacio.style.display = "block"
+            return
+        }
 
-    tbody.innerHTML = "";
+        vacio.style.display = "none"
 
-    if(!lista || lista.length === 0){
-        tbody.innerHTML = `
-        <tr>
-            <td colspan="5" style="color:#94a3b8;">
-                No hay ventas registradas
-            </td>
-        </tr>`;
-        return;
-    }
+        lista.forEach((v,i)=>{
 
-    lista.slice().reverse().forEach((v) => {
-
-        let indexReal = ventas.indexOf(v);
-
-        let fila = document.createElement("tr");
-
-        fila.innerHTML = `
-        <td>${v.numero || "-"}</td>
-        <td>${v.cliente || "SIN NOMBRE"}</td>
-        <td>${v.fecha || "-"}</td>
-        <td>S/ ${Number(v.total || 0).toFixed(2)}</td>
-        <td>
-            <button onclick="verVenta(${indexReal})">👁️</button>
-            <button onclick="descargarPDF(${indexReal})">📄 PDF</button>
-            <button onclick="eliminarVenta(${indexReal})">🗑️</button>
-        </td>
-        `;
-
-        tbody.appendChild(fila);
-    });
-}
-
-// ======================
-// BUSCADOR
-// ======================
-function activarBuscador(){
-
-    let input = document.getElementById("buscarVenta");
-
-    if(!input) return;
-
-    input.addEventListener("input", function(){
-
-        let texto = this.value.toLowerCase();
-
-        let filtrado = ventas.filter(v =>
-            (v.cliente || "").toLowerCase().includes(texto) ||
-            (v.numero || "").toLowerCase().includes(texto)
-        );
-
-        renderVentas(filtrado);
-    });
-}
-
-// ======================
-// VER BOLETA
-// ======================
-function verVenta(i){
-
-    let venta = ventas[i];
-
-    if(!venta){
-        alert("Venta no encontrada");
-        return;
-    }
-
-    let cont = document.getElementById("boletaVista");
-    let modal = document.getElementById("modalBoleta");
-
-    if(!cont || !modal){
-        alert("Falta modal en HTML");
-        return;
-    }
-
-    cont.innerHTML = generarBoletaHTML(venta);
-    modal.style.display = "flex";
-}
-
-// ======================
-// GENERAR BOLETA
-// ======================
-function generarBoletaHTML(v){
-
-    let descuentoTotal = 0;
-
-    (v.items || []).forEach(p => {
-        descuentoTotal += (Number(p.descuento || 0) * Number(p.cantidad));
-    });
-
-    let subtotal = Number(v.total || 0) + descuentoTotal;
-
-    return `
-    <div style="font-family:Arial; color:black; font-size:12px; width:300px;">
-
-        <center>
-            <img src="/assets/img/logo.png" style="width:80px;"><br>
-            <b>INNOVACION TECNOLOGICA</b><br>
-            RUC: 10416270258<br>
-            Huaraz - Ancash
-        </center>
-
-        <hr>
-
-        <b>BOLETA:</b> ${v.numero}<br>
-        <b>FECHA:</b> ${v.fecha}<br>
-        <b>CLIENTE:</b> ${v.cliente}
-
-        <hr>
-
-        <table width="100%">
-            <tr>
-                <th>CANT</th>
-                <th>DESC</th>
-                <th>P.U</th>
-                <th>TOTAL</th>
-            </tr>
-
-            ${(v.items || []).map(p => `
+            tabla.innerHTML += `
                 <tr>
-                    <td>${p.cantidad}</td>
-                    <td>${p.nombre}</td>
-                    <td>${Number(p.precio).toFixed(2)}</td>
-                    <td>${(p.precio * p.cantidad).toFixed(2)}</td>
+                    <td>${v.numero}</td>
+                    <td>${v.cliente}</td>
+                    <td>${v.fecha}</td>
+                    <td>S/ ${Number(v.total).toFixed(2)}</td>
+                    <td>
+                        <button onclick="verBoleta(${i})">🧾</button>
+                        <button onclick="eliminarVenta(${i})">🗑</button>
+                    </td>
                 </tr>
-            `).join("")}
+            `
+        })
+    }
 
+    render()
+
+    /* =========================
+       🔍 BUSCAR
+    ========================= */
+    inputBuscar.addEventListener("input", e => {
+
+        const texto = e.target.value.toLowerCase()
+
+        const filtrado = ventas.filter(v =>
+            (v.cliente || "").toLowerCase().includes(texto) ||
+            (v.numero || "").includes(texto)
+        )
+
+        render(filtrado)
+    })
+
+})
+
+/* =========================
+   🧾 VER BOLETA
+========================= */
+function verBoleta(i){
+
+    let ventas = JSON.parse(localStorage.getItem("ventas")) || []
+    let v = ventas[i]
+
+    if(!v){
+        alert("Venta no encontrada")
+        return
+    }
+
+    let productos = ""
+
+    v.items.forEach(p => {
+
+        let cantidad = Number(p.cantidad)
+        let precio = Number(p.precio)
+        let sub = cantidad * precio
+
+        productos += `
+            <tr>
+                <td>${(p.nombre || '').substring(0,15)}</td>
+                <td>${cantidad}</td>
+                <td>${precio.toFixed(2)}</td>
+                <td>${sub.toFixed(2)}</td>
+            </tr>
+        `
+    })
+
+    document.getElementById("boletaVista").innerHTML = `
+    <div class="ticket">
+
+        
+
+        <h3>INNOVACION TECNOLOGICA</h3>
+        <p>RUC: 10416270258</p>
+        <p>Huaraz - Ancash</p>
+        <p>Cel: ${v.telefono || '-'}</p>
+
+        <hr>
+
+        <p><b>BOLETA:</b> ${v.numero}</p>
+        <p><b>Fecha:</b> ${v.fecha}</p>
+        <p><b>Cliente:</b> ${v.cliente}</p>
+        <p><b>Teléfono:</b> ${v.telefono || '-'}</p>
+        <p><b>Correo:</b> ${v.correo || '-'}</p>
+
+        <hr>
+
+        <table>
+            <tr>
+                <th>DESC</th>
+                <th>CANT</th>
+                <th>P.U</th>
+                <th>SUB</th>
+            </tr>
+            ${productos}
         </table>
 
         <hr>
 
-        <b>SUBTOTAL: S/ ${subtotal.toFixed(2)}</b><br>
-        <b>TOTAL: S/ ${Number(v.total).toFixed(2)}</b>
+        <p style="text-align:right">SUBTOTAL: S/ ${Number(v.total).toFixed(2)}</p>
 
-        <br><br>
-        <center>GRACIAS POR SU COMPRA</center>
+        <div class="total-box">
+            TOTAL: S/ ${Number(v.total).toFixed(2)}
+        </div>
+
+        <hr>
+
+        <p>PAGO: PLIN</p>
+        <p>¡GRACIAS POR SU COMPRA!</p>
+
     </div>
-    `;
+    `
+
+    document.getElementById("modalBoleta").style.display = "flex"
 }
 
-// ======================
-// PDF
-// ======================
-function descargarPDF(i){
-
-    let v = ventas[i];
-
-    if(!v){
-        alert("Venta no encontrada");
-        return;
-    }
-
-    if(typeof html2pdf === "undefined"){
-        alert("Falta librería html2pdf");
-        return;
-    }
-
-    let contenido = document.createElement("div");
-    contenido.innerHTML = generarBoletaHTML(v);
-
-    html2pdf().from(contenido).save(`Boleta-${v.numero}.pdf`);
+/* =========================
+   ❌ CERRAR
+========================= */
+function cerrarBoleta(){
+    document.getElementById("modalBoleta").style.display = "none"
 }
 
-// ======================
-// ELIMINAR
-// ======================
+/* =========================
+   🗑 ELIMINAR
+========================= */
 function eliminarVenta(i){
 
-    if(!confirm("¿Eliminar venta?")) return;
+    let ventas = JSON.parse(localStorage.getItem("ventas")) || []
 
-    ventas.splice(i,1);
+    if(!confirm("¿Eliminar esta venta?")) return
 
-    localStorage.setItem("ventas", JSON.stringify(ventas));
+    ventas.splice(i,1)
 
-    renderVentas();
+    localStorage.setItem("ventas", JSON.stringify(ventas))
+
+    location.reload()
 }
 
-// ======================
-// BORRAR TODO
-// ======================
+/* =========================
+   🗑 BORRAR TODO
+========================= */
 function borrarTodoHistorial(){
 
-    if(!confirm("⚠️ ¿Seguro que quieres borrar todo el historial?")) return;
-
-    localStorage.removeItem("ventas");
-
-    ventas = [];
-
-    renderVentas();
-
-    alert("Historial eliminado correctamente");
+    if(confirm("¿Seguro que deseas borrar TODO el historial?")){
+        localStorage.removeItem("ventas")
+        location.reload()
+    }
 }
 
-// ======================
-// CERRAR MODAL
-// ======================
-function cerrarBoleta(){
-    let modal = document.getElementById("modalBoleta");
-    if(modal) modal.style.display = "none";
+
+document.getElementById("btnLogout")?.addEventListener("click", e=>{
+    e.preventDefault()
+    localStorage.removeItem("rol")
+    window.location.href="/index.html"
+})
+
+function descargarPDF(){
+
+    const contenido = document.getElementById("boletaVista").innerHTML
+
+    const ventana = window.open("", "", "width=300,height=600")
+
+    ventana.document.write(`
+        <html>
+        <head>
+            <title>Boleta PDF</title>
+            <style>
+                body{font-family:monospace;padding:10px;}
+                table{width:100%;border-collapse:collapse;}
+                th,td{font-size:11px;padding:2px;text-align:center;}
+                hr{border-top:1px dashed black;}
+                .total-box{background:black;color:white;padding:5px;text-align:center;}
+            </style>
+        </head>
+        <body>
+            ${contenido}
+        </body>
+        </html>
+    `)
+
+    ventana.document.close()
+
+    setTimeout(()=>{
+        ventana.print()   // 👉 aquí eliges "Guardar como PDF"
+    },500)
 }
 
-// ======================
-// WHATSAPP
-// ======================
-function enviarWhatsAppPDF(i){
 
-    let v = ventas[i];
+function descargarPDF(){
 
-    if(!v) return;
+    const contenido = document.getElementById("boletaVista").innerHTML
 
-    let texto = `Boleta ${v.numero} - Total S/ ${v.total}`;
-    let numero = "51" + (v.telefono || "");
+    const ventana = window.open("", "", "width=300,height=600")
 
-    window.open(`https://wa.me/${numero}?text=${encodeURIComponent(texto)}`);
+    ventana.document.write(`
+        <html>
+        <head>
+            <title>Boleta PDF</title>
+            <style>
+                body{font-family:monospace;padding:10px;}
+                table{width:100%;border-collapse:collapse;}
+                th,td{font-size:11px;padding:2px;text-align:center;}
+                hr{border-top:1px dashed black;}
+                .total-box{background:black;color:white;padding:5px;text-align:center;}
+            </style>
+        </head>
+        <body>
+            ${contenido}
+        </body>
+        </html>
+    `)
+
+    ventana.document.close()
+
+    setTimeout(()=>{
+        ventana.print() // 👉 eliges "Guardar como PDF"
+    },500)
 }
-
-// ======================
-// CORREO
-// ======================
-function enviarCorreo(i){
-
-    let v = ventas[i];
-
-    if(!v) return;
-
-    let asunto = `Boleta ${v.numero}`;
-    let cuerpo = `Total: S/ ${v.total}`;
-
-    window.location.href = `mailto:${v.correo}?subject=${asunto}&body=${cuerpo}`;
-}
-
-// ======================
-// REINICIAR NUMERACIÓN
-// ======================
-function reiniciarNumeracionBoleta(){
-
-    if(!confirm("⚠️ ¿Reiniciar numeración a 1?")) return;
-
-    localStorage.setItem("numBoleta", 1);
-
-    alert("Numeración reiniciada a 1");
-}
-

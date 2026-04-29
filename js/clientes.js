@@ -1,129 +1,101 @@
-javascript
 /* ======================
-📦 STORAGE SEGURO
+📦 STORAGE
 ====================== */
-let clientes;
+let clientes = JSON.parse(localStorage.getItem("clientes")) || []
 
-try{
-    clientes = JSON.parse(localStorage.getItem("clientes")) || [];
-}catch{
-    clientes = [];
-}
+const tabla = document.getElementById("tablaClientes")
+const buscar = document.getElementById("buscarCliente")
 
-if(!Array.isArray(clientes)){
-    clientes = [];
-}
-
-/* ======================
-🔐 ROL
-====================== */
-const rol = localStorage.getItem("rol") || "empleado";
-
-let indexEditar = null;
+let indexEditar = null
 
 /* ======================
 🚀 INIT
 ====================== */
 document.addEventListener("DOMContentLoaded", () => {
 
-    const inputBuscar = document.getElementById("buscar");
+    render()
 
-    if(inputBuscar){
-        inputBuscar.addEventListener("input", mostrar);
+    if (buscar) {
+        buscar.addEventListener("input", buscarCliente)
     }
-
-    mostrar();
-
-});
+})
 
 /* ======================
 💾 GUARDAR
 ====================== */
 function guardarCliente(){
 
-    let nombre = document.getElementById("nombre").value.trim();
-    let telefono = document.getElementById("telefono").value.trim();
-    let correo = document.getElementById("correo").value.trim();
+    const nombre = document.getElementById("nombre").value.trim()
+    const telefono = document.getElementById("telefono").value.trim()
+    const correo = document.getElementById("correo").value.trim()
+    const direccion = document.getElementById("direccion").value.trim()
 
-    if(!nombre) return alert("Ingrese nombre");
-
-    if(rol !== "admin" && indexEditar !== null){
-        return alert("No tienes permiso para editar");
+    if (!nombre) {
+        alert("Ingrese nombre")
+        return
     }
 
-    if(indexEditar !== null){
-        clientes[indexEditar] = {nombre, telefono, correo};
-        indexEditar = null;
-    }else{
-        clientes.push({nombre, telefono, correo});
+    const cliente = { nombre, telefono, correo, direccion }
+
+    if (indexEditar === null) {
+        clientes.push(cliente)
+    } else {
+        clientes[indexEditar] = cliente
+        indexEditar = null
     }
 
-    localStorage.setItem("clientes", JSON.stringify(clientes));
+    localStorage.setItem("clientes", JSON.stringify(clientes))
 
-    limpiar();
-    mostrar();
+    limpiar()
+    render()
 }
 
 /* ======================
-📊 MOSTRAR
+📊 RENDER
 ====================== */
-function mostrar(){
+function render(lista = clientes){
 
-    let tabla = document.getElementById("tablaClientes");
-    let inputBuscar = document.getElementById("buscar");
+    tabla.innerHTML = ""
 
-    if(!tabla) return;
-
-    let buscar = inputBuscar ? inputBuscar.value.toLowerCase() : "";
-
-    tabla.innerHTML = "";
-
-    let filtrados = clientes.filter(c =>
-        (c.nombre || "").toLowerCase().includes(buscar) ||
-        (c.telefono || "").includes(buscar) ||
-        (c.correo || "").toLowerCase().includes(buscar)
-    );
-
-    if(filtrados.length === 0){
-        tabla.innerHTML = `<tr><td colspan="5">No hay resultados</td></tr>`;
-        return;
+    if (lista.length === 0) {
+        tabla.innerHTML = "<tr><td colspan='5'>No hay clientes</td></tr>"
+        return
     }
 
-    filtrados.forEach((c)=>{
+    lista.forEach((c, i) => {
 
-        let indexReal = clientes.indexOf(c);
+        const tr = document.createElement("tr")
 
-        tabla.innerHTML += `
-        <tr>
-            <td>${indexReal + 1}</td>
+        tr.innerHTML = `
             <td>${c.nombre}</td>
             <td>${c.telefono || ""}</td>
             <td>${c.correo || ""}</td>
+            <td>${c.direccion || ""}</td>
             <td>
-                ${rol === "admin" ? `
-                    <button onclick="editar(${indexReal})">✏️</button>
-                    <button onclick="eliminar(${indexReal})">🗑</button>
-                ` : `
-                    <span style="color:#94a3b8;">Sin permisos</span>
-                `}
+                <button onclick="editar(${i})">✏️</button>
+                <button onclick="eliminar(${i})">🗑</button>
             </td>
-        </tr>`;
-    });
+        `
 
+        tabla.appendChild(tr)
+    })
 }
 
 /* ======================
-❌ ELIMINAR
+🔍 BUSCAR
 ====================== */
-function eliminar(i){
+function buscarCliente(){
 
-    if(rol !== "admin") return alert("No tienes permiso");
+    const texto = buscar.value.toLowerCase()
 
-    if(confirm("¿Eliminar cliente?")){
-        clientes.splice(i,1);
-        localStorage.setItem("clientes", JSON.stringify(clientes));
-        mostrar();
-    }
+    const filtrados = clientes.filter(c =>
+        (c.nombre || "").toLowerCase().includes(texto) ||
+        (c.telefono || "").includes(texto) ||
+        (c.correo || "").toLowerCase().includes(texto) ||
+        (c.direccion || "").toLowerCase().includes(texto)
+    )
+
+    render(filtrados)
 }
 
 /* ======================
@@ -131,24 +103,39 @@ function eliminar(i){
 ====================== */
 function editar(i){
 
-    if(rol !== "admin") return alert("No tienes permiso");
+    const c = clientes[i]
 
-    let c = clientes[i];
+    document.getElementById("nombre").value = c.nombre
+    document.getElementById("telefono").value = c.telefono || ""
+    document.getElementById("correo").value = c.correo || ""
+    document.getElementById("direccion").value = c.direccion || ""
 
-    document.getElementById("nombre").value = c.nombre;
-    document.getElementById("telefono").value = c.telefono || "";
-    document.getElementById("correo").value = c.correo || "";
+    indexEditar = i
+}
 
-    indexEditar = i;
+/* ======================
+❌ ELIMINAR
+====================== */
+function eliminar(i){
+
+    if (confirm("¿Eliminar cliente?")) {
+        clientes.splice(i, 1)
+        localStorage.setItem("clientes", JSON.stringify(clientes))
+        render()
+    }
 }
 
 /* ======================
 🧹 LIMPIAR
 ====================== */
 function limpiar(){
-    document.getElementById("nombre").value = "";
-    document.getElementById("telefono").value = "";
-    document.getElementById("correo").value = "";
+
+    document.getElementById("nombre").value = ""
+    document.getElementById("telefono").value = ""
+    document.getElementById("correo").value = ""
+    document.getElementById("direccion").value = ""
+
+    indexEditar = null
 }
 
 

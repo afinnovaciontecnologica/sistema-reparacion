@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,7 +6,7 @@
 <title>Reparaciones PRO</title>
 
 <!-- CSS -->
-<link rel="stylesheet" href="/css/reparaciones.css">
+<link rel="stylesheet" href="../css/reparaciones.css">
 
 <!-- ICONOS -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -23,20 +22,47 @@
 <div class="sidebar">
     <h2>🛠 Sistema</h2>
 
-    <a href="/dashboard.html"><i class="fa fa-home"></i> Inicio</a>
-    <a href="clientes.html"><i class="fa fa-users"></i> Clientes</a>
-    <a href="cotizaciones.html"><i class="fa fa-file-alt"></i> Cotización</a>
-    <a href="productos.html"><i class="fa fa-box"></i> Productos</a>
-    <a href="reparaciones.html" class="active"><i class="fa fa-tools"></i> Reparaciones</a>
-    <a href="ventas.html"><i class="fa fa-shopping-cart"></i> Ventas</a>
-    <a href="historial.html"><i class="fa fa-clock"></i> Historial</a>
-    <a href="#" id="btnLogout"><i class="fa fa-sign-out-alt"></i> Salir</a>
+    <a href="dashboard.html" id="menu-dashboard">
+        <i class="fa fa-home"></i> Inicio
+    </a>
+
+    <a href="clientes.html" id="menu-clientes">
+        <i class="fa fa-users"></i> Clientes
+    </a>
+
+    <a href="cotizaciones.html" id="menu-cotizacion">
+        <i class="fa fa-file-alt"></i> Cotización
+    </a>
+
+    <a href="productos.html" id="menu-productos">
+        <i class="fa fa-box"></i> Productos
+    </a>
+
+    <a href="reparaciones.html" id="menu-reparaciones" class="active">
+        <i class="fa fa-tools"></i> Reparaciones
+    </a>
+
+    <a href="ventas.html" id="menu-ventas">
+        <i class="fa fa-shopping-cart"></i> Ventas
+    </a>
+
+    <a href="historial.html" id="menu-historial">
+        <i class="fa fa-clock"></i> Historial
+    </a>
+
+    <a href="#" id="btnLogout">
+        <i class="fa fa-sign-out-alt"></i> Salir
+    </a>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<h1>🛠 Reparaciones PRO</h1>
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>🛠 Reparaciones PRO</h1>
+    <button onclick="resetearOrden()">🔄 Resetear Orden</button>
+</div>
+
 <hr>
 
 <!-- CLIENTE -->
@@ -79,7 +105,6 @@
 </select>
 
 <input type="text" id="modelo" placeholder="Modelo">
-
 <input id="tecnico" placeholder="👨‍🔧 Técnico responsable">
 <input id="garantia" placeholder="🛡 Garantía">
 
@@ -92,13 +117,23 @@
 
 </div>
 
-<div class="accesorios">
-<label><input type="checkbox" value="Cargador"> 🔌 Cargador</label>
-<label><input type="checkbox" value="Batería"> 🔋 Batería</label>
-<label><input type="checkbox" value="Mouse"> 🖱 Mouse</label>
-<label><input type="checkbox" value="Funda"> 🎒 Funda</label>
+<div class="accesorios-box">
+
+<div class="accesorios-grid">
+<label class="chip"><input type="checkbox" value="Cargador"> 🔌 <span>Cargador</span></label>
+<label class="chip"><input type="checkbox" value="Batería"> 🔋 <span>Batería</span></label>
+<label class="chip"><input type="checkbox" value="Mouse"> 🖱 <span>Mouse</span></label>
+<label class="chip"><input type="checkbox" value="Funda"> 🎒 <span>Funda</span></label>
 </div>
 
+<div id="bloqueTintas" class="tintas-box">
+<div class="tinta">🟡 Amarillo <select><option>Completo</option><option>Medio</option><option>Bajo</option><option>Vacío</option></select></div>
+<div class="tinta">🟣 Magenta <select><option>Completo</option><option>Medio</option><option>Bajo</option><option>Vacío</option></select></div>
+<div class="tinta">🔵 Cyan <select><option>Completo</option><option>Medio</option><option>Bajo</option><option>Vacío</option></select></div>
+<div class="tinta">⚫ Negro <select><option>Completo</option><option>Medio</option><option>Bajo</option><option>Vacío</option></select></div>
+</div>
+
+</div>
 </div>
 
 <!-- DIAGNÓSTICO -->
@@ -114,7 +149,6 @@
 <div id="listaServicios"></div>
 
 <textarea id="solucion" placeholder="Solución"></textarea>
-
 </div>
 
 <!-- CONTROL -->
@@ -156,15 +190,16 @@
 </div>
 
 <!-- JS -->
-<script src="/js/reparaciones.js"></script>
-<script src="/js/roles.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="../js/guard.js"></script>
+<script src="../js/reparaciones.js"></script>
 
-<!-- LOGOUT -->
+<!-- LOGOUT CORRECTO -->
 <script>
 document.getElementById("btnLogout").addEventListener("click", function(e){
     e.preventDefault();
-    localStorage.removeItem("rol");
-    window.location.href = "/login.html";
+    localStorage.clear();
+    window.location.href = "../index.html";
 });
 </script>
 

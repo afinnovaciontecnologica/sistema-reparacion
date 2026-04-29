@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Productos</title>
 
-<link rel="stylesheet" href="/css/styles.css">
-<link rel="stylesheet" href="/css/productos.css">
+<link rel="stylesheet" href="../css/styles.css">
+<link rel="stylesheet" href="../css/productos.css">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 </head>
@@ -15,180 +14,120 @@
 <body>
 
 <!-- SIDEBAR -->
-
 <aside class="sidebar">
     <h2>🛠 Sistema</h2>
 
-<ul>
-    <li>
-        <a href="/dashboard.html" id="menu-inicio">
-            <i class="fa fa-home"></i> Inicio
-        </a>
-    </li>
-
-
-<li>
-    <a href="clientes.html" id="menu-clientes">
-        <i class="fa fa-users"></i> Clientes
-    </a>
-</li>
-
-<!-- 🔥 AGREGADO -->
-<li>
-    <a href="cotizaciones.html" id="menu-cotizacion">
-        <i class="fa fa-file-alt"></i> Cotización
-    </a>
-</li>
-
-<!-- 🔥 ESTE ES ADMIN -->
-<li>
-    <a href="productos.html" id="menu-productos" class="active">
-        <i class="fa fa-box"></i> Productos
-    </a>
-</li>
-
-<li>
-    <a href="reparaciones.html" id="menu-reparaciones">
-        <i class="fa fa-tools"></i> Reparaciones
-    </a>
-</li>
-
-<li>
-    <a href="ventas.html" id="menu-ventas">
-        <i class="fa fa-shopping-cart"></i> Ventas
-    </a>
-</li>
-
-<!-- 🔥 SOLO ADMIN -->
-<li>
-    <a href="historial.html" id="menu-historial">
-        <i class="fa fa-clock"></i> Historial
-    </a>
-</li>
-
-<li>
-    <a href="#" id="btnLogout">
-        <i class="fa fa-sign-out-alt"></i> Salir
-    </a>
-</li>
-
-
-</ul>
-
+    <ul>
+        <li><a href="../dashboard.html"><i class="fa fa-home"></i> Inicio</a></li>
+        <li><a href="clientes.html"><i class="fa fa-users"></i> Clientes</a></li>
+        <li><a href="cotizaciones.html"><i class="fa fa-file-alt"></i> Cotización</a></li>
+        <li><a href="productos.html" class="active"><i class="fa fa-box"></i> Productos</a></li>
+        <li><a href="reparaciones.html"><i class="fa fa-tools"></i> Reparaciones</a></li>
+        <li><a href="ventas.html"><i class="fa fa-shopping-cart"></i> Ventas</a></li>
+        <li><a href="historial.html"><i class="fa fa-clock"></i> Historial</a></li>
+        <li><a href="#" id="btnLogout"><i class="fa fa-sign-out-alt"></i> Salir</a></li>
+    </ul>
 </aside>
 
 <!-- CONTENIDO -->
-
 <main class="main">
 
 <!-- HEADER -->
-
 <div class="header">
     <h1>📦 Gestión de Productos</h1>
-    <p>Administra tu inventario de manera rápida y profesional</p>
+    <p>Administra tu inventario de forma rápida, visual y profesional</p>
 </div>
 
-<!-- FORMULARIO -->
-
+<!-- FORM -->
 <div class="card-form">
 
+    <h3><i class="fa fa-plus"></i> Nuevo Producto</h3>
 
-<h3><i class="fa fa-plus"></i> Nuevo Producto</h3>
+    <div class="grid-form">
 
-<div class="grid-form">
+        <div class="form-group">
+            <label><i class="fa fa-tag"></i> Nombre</label>
+            <input type="text" id="nombre" placeholder="Ej: Laptop HP">
+        </div>
 
-    <div class="form-group">
-        <label>Nombre</label>
-        <input type="text" id="nombre" placeholder="Ej: Laptop HP">
+        <div class="form-group">
+            <label><i class="fa fa-align-left"></i> Descripción</label>
+            <input type="text" id="descripcion" placeholder="Detalles del producto">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa fa-layer-group"></i> Categoría</label>
+            <select id="categoria"></select>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa fa-sitemap"></i> Subcategoría</label>
+            <select id="subcategoria"></select>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa fa-dollar-sign"></i> Precio (S/)</label>
+            <input type="number" id="precio" min="0" step="0.01">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa fa-boxes"></i> Stock</label>
+            <input type="number" id="stock" min="0">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa fa-image"></i> Imagen</label>
+            <input type="file" id="imagen" accept="image/*">
+        </div>
+
     </div>
 
-    <div class="form-group">
-        <label>Descripción</label>
-        <input type="text" id="descripcion" placeholder="Detalles del producto">
+    <!-- PREVIEW -->
+    <div class="preview">
+        <img id="previewImg" alt="preview">
     </div>
 
-    <div class="form-group">
-        <label>Categoría</label>
-        <select id="categoria"></select>
-    </div>
-
-    <div class="form-group">
-        <label>Subcategoría</label>
-        <select id="subcategoria"></select>
-    </div>
-
-    <div class="form-group">
-        <label>Precio (S/)</label>
-        <input type="number" id="precio">
-    </div>
-
-    <div class="form-group">
-        <label>Stock</label>
-        <input type="number" id="stock">
-    </div>
-
-    <div class="form-group">
-        <label>Imagen</label>
-        <input type="file" id="imagen" accept="image/*">
-    </div>
-
-</div>
-
-<!-- PREVIEW -->
-<div class="preview">
-    <img id="previewImg" src="" alt="preview" style="display:none;">
-</div>
-
-<button class="btn-guardar" onclick="guardarProducto()">
-    <i class="fa fa-save"></i> Guardar Producto
-</button>
-
+    <button class="btn-guardar" id="btnGuardar">
+        <i class="fa fa-save"></i> Guardar Producto
+    </button>
 
 </div>
 
 <!-- BUSCADOR -->
-
 <div class="buscador">
     <i class="fa fa-search"></i>
-    <input type="text" id="buscar" placeholder="Buscar por nombre, categoría..." onkeyup="buscarProducto()">
+    <input type="text" id="buscar" placeholder="Buscar producto, categoría o descripción...">
 </div>
 
 <!-- TABLA -->
-
 <div class="tabla">
 
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Detalle</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
 
-<table>
-    <thead>
-        <tr>
-            <th>Producto</th>
-            <th>Detalle</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Imagen</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-
-    <tbody id="tablaProductos"></tbody>
-
-</table>
-
+        <tbody id="tablaProductos"></tbody>
+    </table>
 
 </div>
 
 </main>
 
-<!-- SCRIPTS -->
+<!-- 🔐 SEGURIDAD -->
+<script src="../js/guard.js"></script>
 
-<script src="/js/productos.js"></script>
-
-<script src="/js/protect.js"></script>
-
-<script src="/js/roles.js"></script>
+<!-- JS PRINCIPAL -->
+<script src="../js/productos.js"></script>
 
 <!-- PREVIEW IMAGEN -->
-
 <script>
 const inputImagen = document.getElementById("imagen");
 const preview = document.getElementById("previewImg");
@@ -205,19 +144,14 @@ if(inputImagen){
 </script>
 
 <!-- LOGOUT -->
-
 <script>
 const btnLogout = document.getElementById("btnLogout");
 
 if(btnLogout){
     btnLogout.addEventListener("click", function(e){
         e.preventDefault();
-
-        // limpiar sesión
-        localStorage.removeItem("rol");
-
-        // redirigir seguro
-        window.location.href = "/login.html";
+        localStorage.clear();
+        window.location.href = "../index.html";
     });
 }
 </script>
