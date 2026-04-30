@@ -647,7 +647,7 @@ return `
 <div class="ticket">
 
     <div class="header-empresa">
-        <img src="/assets/img/logo.png" class="logo">
+        <img src="/sistema-reparacion/assets/img/Logo.png" class="logo">
         <h2>INNOVACION TECNOLOGICA</h2>
         <p>RUC: 10416270258</p>
         <p>Huaraz - Ancash</p>
