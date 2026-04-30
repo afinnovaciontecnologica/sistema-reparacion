@@ -589,41 +589,31 @@ function descargarControlPDF(){
 
 function enviarControlWhatsApp(){
 
-    const r = window.controlActual; // 🔥 USAR EL CONTROL ACTUAL
+    const r = reparaciones.find(x => x.id === reparacionActualId)
 
-    if(!r) {
-        alert("No hay datos para enviar");
-        return;
-    }
+    if(!r) return
 
-    let [nombre, telefono] = r.cliente.split("|");
+    let texto = `
+🧾 *CONTROL DE ATENCIÓN*
 
-    if(!telefono){
-        alert("Cliente sin teléfono");
-        return;
-    }
+👤 Cliente: ${r.cliente}
+📱 Teléfono: ${r.telefono}
 
-    // limpiar número
-    telefono = telefono.replace(/\D/g, "");
+💻 Equipo: ${r.tipo}
+Marca: ${r.marca}
+Modelo: ${r.modelo}
 
-    let texto = `🧾 *CONTROL DE ATENCIÓN*\n\n`;
+🛠 Diagnóstico:
+${(r.servicios || []).map(s => "• " + s).join("\n")}
 
-    texto += `👤 Cliente: ${nombre}\n`;
-    texto += `📱 Teléfono: ${telefono}\n\n`;
+💰 Total: S/. ${r.costo}
 
-    texto += `💻 Equipo: ${r.tipo}\n`;
-    texto += `Marca: ${r.marca}\n`;
-    texto += `Modelo: ${r.modelo}\n\n`;
+📌 Estado: ${r.estado}
+`
 
-    texto += `🛠 Diagnóstico:\n`;
-    texto += (r.servicios || []).map(s => "• " + s).join("\n");
+    const url = `https://wa.me/51${r.telefono}?text=${encodeURIComponent(texto)}`
 
-    texto += `\n\n💰 Total: S/. ${r.costo}`;
-    texto += `\n📌 Estado: ${r.estado}`;
-
-    const url = `https://wa.me/51${telefono}?text=${encodeURIComponent(texto)}`;
-
-    window.open(url, "_blank");
+    window.open(url, "_blank")
 }
 
 function cerrarControl(){
@@ -678,7 +668,7 @@ function generarControlHTML(r){
     <div class="ticket-pro">
 
         <div class="empresa">
-            <img src="/sistema-reparacion/assets/img/Logo.png">
+            <img src="/assets/img/logo.png" class="logo">
             <h2>INNOVACION TECNOLOGICA</h2>
             <p>RUC: 10416270258</p>
             <p>Huaraz - Ancash</p>
