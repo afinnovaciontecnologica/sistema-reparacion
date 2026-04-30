@@ -672,8 +672,7 @@ function generarControlHTML(r){
     <div class="ticket-pro">
 
         <div class="empresa">
-           <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="Logo">
-            <h2>INNOVACION TECNOLOGICA</h2>
+          <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="logo">
             <p>RUC: 10416270258</p>
             <p>Huaraz - Ancash</p>
             <p>WhatsApp: 948231352</p>
