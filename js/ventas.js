@@ -647,7 +647,7 @@ return `
 <div class="ticket">
 
     <div class="header-empresa">
-        <img src="/sistema-reparacion/assets/img/Logo.png" class="logo">
+        <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="logo">
         <h2>INNOVACION TECNOLOGICA</h2>
         <p>RUC: 10416270258</p>
         <p>Huaraz - Ancash</p>
@@ -770,14 +770,18 @@ function descargarPDF(i){
         margin: 0,
         filename: `Boleta-${venta.numero}.pdf`,
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 3 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: {
+            scale: 2,
+            useCORS: true
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: [80, 250],
+            orientation: 'portrait'
+        }
     };
 
     html2pdf().from(contenedor).set(opciones).save();
-
-    // 🔥 abrir WhatsApp después
-    
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -828,15 +832,19 @@ function enviarWhatsApp(){
     contenedor.innerHTML = html;
 
     let opciones = {
-        margin: 0,
-        filename: `Boleta-${venta.numero}.pdf`,
-        image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 3 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().from(contenedor).set(opciones).save();
-
+    margin: 0,
+    filename: `Boleta-${venta.numero}.pdf`,
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: {
+        scale: 2,
+        useCORS: true
+    },
+    jsPDF: {
+        unit: 'mm',
+        format: [80, 250],
+        orientation: 'portrait'
+    }
+};
     // 🔥 2. ABRIR WHATSAPP (SIN ESPERAR PROMESAS)
    let detalle = venta.items.map(p =>
 `• ${p.nombre} x${p.cantidad} — S/. ${(p.precio * p.cantidad).toFixed(2)}`
@@ -900,12 +908,19 @@ function descargarPDFManual(){
     let contenedor = document.createElement("div");
     contenedor.innerHTML = html;
 
-    let opciones = {
+    const opciones = {
         margin: 0,
         filename: `Boleta-${venta.numero}.pdf`,
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: { scale: 3 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: {
+            scale: 2,
+            useCORS: true // 🔥 CLAVE PARA EL LOGO
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: [80, 250], // 🔥 TICKET
+            orientation: 'portrait'
+        }
     };
 
     html2pdf().from(contenedor).set(opciones).save();
