@@ -589,29 +589,29 @@ function descargarControlPDF(){
 
 function enviarControlWhatsApp(){
 
-    const r = reparaciones.find(x => x.id === reparacionActualId)
+    const r = window.controlActual
 
-    if(!r) return
+    if(!r) return alert("No hay control seleccionado")
 
-    let texto = `
-🧾 *CONTROL DE ATENCIÓN*
+    let [nombre, telefono] = r.cliente.split("|")
 
-👤 Cliente: ${r.cliente}
-📱 Teléfono: ${r.telefono}
+    if(!telefono){
+        return alert("Teléfono no válido")
+    }
 
-💻 Equipo: ${r.tipo}
-Marca: ${r.marca}
-Modelo: ${r.modelo}
+    const numero = telefono.replace(/\D/g,"")
 
-🛠 Diagnóstico:
-${(r.servicios || []).map(s => "• " + s).join("\n")}
+    let texto = `🧾 *CONTROL DE ATENCIÓN*\n\n`
+    texto += `👤 ${nombre}\n📱 ${telefono}\n\n`
+    texto += `💻 ${r.tipo} ${r.marca} ${r.modelo}\n\n`
 
-💰 Total: S/. ${r.costo}
+    texto += `🛠 Diagnóstico:\n`
+    texto += (r.servicios || []).map(s => "• " + s).join("\n")
 
-📌 Estado: ${r.estado}
-`
+    texto += `\n\n💰 TOTAL: S/. ${r.costo}`
+    texto += `\n📌 Estado: ${r.estado}`
 
-    const url = `https://wa.me/51${r.telefono}?text=${encodeURIComponent(texto)}`
+    const url = `https://wa.me/51${numero}?text=${encodeURIComponent(texto)}`
 
     window.open(url, "_blank")
 }
@@ -668,7 +668,7 @@ function generarControlHTML(r){
     <div class="ticket-pro">
 
         <div class="empresa">
-            <img src="/sistema-reparacion/assets/img/logo.png" class="logo">
+           <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="logo">
             <h2>INNOVACION TECNOLOGICA</h2>
             <p>RUC: 10416270258</p>
             <p>Huaraz - Ancash</p>
