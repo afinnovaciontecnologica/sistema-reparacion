@@ -276,8 +276,10 @@ MODAL
 }
 
 .logo{
-  height:75px;
-  margin-bottom:6px;
+    width:120px;
+    display:block;
+    margin:0 auto 10px;
+    position:static;
 }
 
 .title{

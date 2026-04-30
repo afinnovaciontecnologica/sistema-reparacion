@@ -4,8 +4,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 🔴 SIN LOGIN → LOGIN
     if (!rol) {
-        window.location.href = "/index.html";
+        window.location.href = "../index.html";
         return;
+    }
+
+    // 🔥 RUTA ACTUAL
+    const path = window.location.pathname;
+
+    // 🔒 BLOQUEO REAL (IMPORTANTE)
+    if (rol === "empleado") {
+
+        if (
+            path.includes("productos.html") ||
+            path.includes("historial.html") ||
+            path.includes("dashboard.html")
+        ) {
+            alert("⛔ No tienes acceso a esta sección");
+            window.location.href = "clientes.html";
+            return;
+        }
     }
 
     // MENÚS
@@ -30,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // 🟡 EMPLEADO (RESTRINGIDO)
     if (rol === "empleado") {
 
-        // OCULTAR MENÚS PROHIBIDOS
         if (menus.dashboard) menus.dashboard.style.display = "none";
         if (menus.productos) menus.productos.style.display = "none";
         if (menus.historial) menus.historial.style.display = "none";

@@ -569,7 +569,7 @@ body{background:white}
 <div class="content">
 
 <div class="header">
-<img src="/sistema-reparacion/assets/img/Logo.png">
+<img src="/sistema-reparacion/assets/img/logo.png" class="logo">
 <div class="title">AF INNOVACION TECNOLOGICA</div>
 <div class="tag">Soluciones Tecnológicas a tu Alcance</div>
 RUC: 10416270258<br>
