@@ -770,18 +770,14 @@ function descargarPDF(i){
         margin: 0,
         filename: `Boleta-${venta.numero}.pdf`,
         image: { type: 'jpeg', quality: 1 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true
-        },
-        jsPDF: {
-            unit: 'mm',
-            format: [80, 250],
-            orientation: 'portrait'
-        }
+        html2canvas: { scale: 3 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
     html2pdf().from(contenedor).set(opciones).save();
+
+    // 🔥 abrir WhatsApp después
+    
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -832,19 +828,15 @@ function enviarWhatsApp(){
     contenedor.innerHTML = html;
 
     let opciones = {
-    margin: 0,
-    filename: `Boleta-${venta.numero}.pdf`,
-    image: { type: 'jpeg', quality: 1 },
-    html2canvas: {
-        scale: 2,
-        useCORS: true
-    },
-    jsPDF: {
-        unit: 'mm',
-        format: [80, 250],
-        orientation: 'portrait'
-    }
-};
+        margin: 0,
+        filename: `Boleta-${venta.numero}.pdf`,
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 3 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().from(contenedor).set(opciones).save();
+
     // 🔥 2. ABRIR WHATSAPP (SIN ESPERAR PROMESAS)
    let detalle = venta.items.map(p =>
 `• ${p.nombre} x${p.cantidad} — S/. ${(p.precio * p.cantidad).toFixed(2)}`
