@@ -569,7 +569,7 @@ body{background:white}
 <div class="content">
 
 <div class="header">
-<img src="../assets/img/logo.png" class="logo">
+<img src="/sistema-reparacion/assets/img/Logo.png">
 <div class="title">AF INNOVACION TECNOLOGICA</div>
 <div class="tag">Soluciones Tecnológicas a tu Alcance</div>
 RUC: 10416270258<br>
@@ -623,7 +623,7 @@ IGV (18%): S/ ${igv.toFixed(2)}<br>
 
 <div class="footer" style="margin-top:20px; padding:0; border:none;">
 
-<img src="../assets/img/pie_pagina.png" style="
+<img src="/sistema-reparacion/assets/img/pie_pagina.png" style="
 width:100%;
 height:auto;
 display:block;
