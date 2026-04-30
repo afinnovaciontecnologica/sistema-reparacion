@@ -591,12 +591,16 @@ function enviarControlWhatsApp(){
 
     const r = window.controlActual
 
-    if(!r) return alert("No hay control seleccionado")
+    if(!r){
+        alert("No hay datos para enviar")
+        return
+    }
 
     let [nombre, telefono] = r.cliente.split("|")
 
     if(!telefono){
-        return alert("Teléfono no válido")
+        alert("Teléfono no válido")
+        return
     }
 
     const numero = telefono.replace(/\D/g,"")
@@ -668,7 +672,7 @@ function generarControlHTML(r){
     <div class="ticket-pro">
 
         <div class="empresa">
-           <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="logo">
+           <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="Logo">
             <h2>INNOVACION TECNOLOGICA</h2>
             <p>RUC: 10416270258</p>
             <p>Huaraz - Ancash</p>
