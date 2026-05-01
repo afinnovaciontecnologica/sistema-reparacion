@@ -12,6 +12,7 @@
 <!-- CHART -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- CSS -->
 <link rel="stylesheet" href="css/dashboard.css">
 
 </head>
@@ -23,12 +24,17 @@
 
     <div>
 
-        <div class="logo">
-            <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="logo">
-            <h3>AF Innovación Tecnológica</h3>
-            <small>Sistema de Gestión</small>
+        <!-- 🔥 LOGO CORREGIDO -->
+        <div class="logo-box">
+            <img src="https://afinnovaciontecnologica.github.io/sistema-reparacion/assets/img/logo.png" class="logo-img">
+            
+            <div class="logo-text">
+                <h3>AF Innovación Tecnológica</h3>
+                <small>Sistema de Gestión</small>
+            </div>
         </div>
 
+        <!-- MENU -->
         <div class="menu">
 
             <a href="pages/clientes.html">
@@ -63,6 +69,7 @@
 
     </div>
 
+    <!-- LOGOUT -->
     <div class="logout-box">
         <button class="logout-btn" onclick="logout()">
             <i class="ri-logout-box-r-line"></i> Salir
@@ -74,7 +81,7 @@
 <!-- MAIN -->
 <div class="main">
 
-    <!-- HEADER MODERNO -->
+    <!-- HEADER -->
     <div class="header">
 
         <div>
@@ -101,8 +108,7 @@
 
     </div>
 
-
-    <!-- STATS MODERNAS -->
+    <!-- STATS -->
     <div class="stats">
 
         <div class="stat">
@@ -139,8 +145,7 @@
 
     </div>
 
-
-    <!-- GRAFICO -->
+    <!-- CHART -->
     <div class="chart-box">
         <div class="chart-header">
             <h3>Ventas de la Semana</h3>
@@ -153,16 +158,37 @@
 <!-- JS -->
 <script src="js/dashboard.js"></script>
 
+<!-- 🔐 CONTROL ROL + UI -->
 <script>
-/* MINI DETALLE UX */
 document.addEventListener("DOMContentLoaded", () => {
-    const rol = localStorage.getItem("rol")
-    const mini = document.getElementById("userRolMini")
 
-    if(mini && rol){
-        mini.textContent = rol.toUpperCase()
+    const rol = localStorage.getItem("rol");
+    const mini = document.getElementById("userRolMini");
+    const rolTexto = document.getElementById("rolTexto");
+
+    if(!rol){
+        window.location.href = "index.html";
+        return;
     }
-})
+
+    // Mostrar rol
+    if(mini) mini.textContent = rol.toUpperCase();
+    if(rolTexto) rolTexto.textContent = "Rol: " + rol;
+
+    // Ocultar admin si es empleado
+    if(rol === "empleado"){
+        document.getElementById("adminMenu")?.remove();
+    }
+
+});
+</script>
+
+<!-- LOGOUT -->
+<script>
+function logout(){
+    localStorage.clear();
+    window.location.href = "index.html";
+}
 </script>
 
 </body>
